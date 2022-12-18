@@ -1,0 +1,602 @@
+<?xml version="1.0" encoding="utf-8"?>
+<CheatTable CheatEngineTableVersion="42">
+  <CheatEntries>
+    <CheatEntry>
+      <ID>149</ID>
+      <Description>"Classic/Poker/Zen/Lightning; Score:"</Description>
+      <ShowAsSigned>0</ShowAsSigned>
+      <VariableType>4 Bytes</VariableType>
+      <Address>"popcapgame1.exe"+00487F34</Address>
+      <Offsets>
+        <Offset>D20</Offset>
+        <Offset>BE0</Offset>
+      </Offsets>
+    </CheatEntry>
+    <CheatEntry>
+      <ID>150</ID>
+      <Description>"Diamond Mine; Score:"</Description>
+      <ShowAsSigned>0</ShowAsSigned>
+      <VariableType>4 Bytes</VariableType>
+      <Address>"popcapgame1.exe"+00487F34</Address>
+      <Offsets>
+        <Offset>E00</Offset>
+        <Offset>BE0</Offset>
+      </Offsets>
+    </CheatEntry>
+    <CheatEntry>
+      <ID>151</ID>
+      <Description>"Classic/Zen; Level #"</Description>
+      <ShowAsSigned>0</ShowAsSigned>
+      <VariableType>2 Bytes</VariableType>
+      <Address>"popcapgame1.exe"+00487F34</Address>
+      <Offsets>
+        <Offset>E04</Offset>
+        <Offset>BE0</Offset>
+      </Offsets>
+    </CheatEntry>
+    <CheatEntry>
+      <ID>152</ID>
+      <Description>"Classic/Zen; Cascade # (if &gt;12)"</Description>
+      <ShowAsSigned>0</ShowAsSigned>
+      <VariableType>2 Bytes</VariableType>
+      <Address>"popcapgame1.exe"+00487F34</Address>
+      <Offsets>
+        <Offset>22E8</Offset>
+        <Offset>BE0</Offset>
+      </Offsets>
+    </CheatEntry>
+    <CheatEntry>
+      <ID>153</ID>
+      <Description>"Lightning; Time to sum:"</Description>
+      <ShowAsSigned>0</ShowAsSigned>
+      <VariableType>2 Bytes</VariableType>
+      <Address>"popcapgame1.exe"+00487F34</Address>
+      <Offsets>
+        <Offset>30A4</Offset>
+        <Offset>BE0</Offset>
+      </Offsets>
+    </CheatEntry>
+    <CheatEntry>
+      <ID>154</ID>
+      <Description>"Press "+" to activate Blazing Speed"</Description>
+      <ShowAsHex>1</ShowAsHex>
+      <ShowAsSigned>0</ShowAsSigned>
+      <VariableType>4 Bytes</VariableType>
+      <Address>"popcapgame1.exe"+00487F34</Address>
+      <Offsets>
+        <Offset>1188</Offset>
+        <Offset>BE0</Offset>
+      </Offsets>
+      <Hotkeys>
+        <Hotkey>
+          <Action>Set Value</Action>
+          <Keys>
+            <Key>187</Key>
+          </Keys>
+          <Value>3FFFFFFF</Value>
+          <Description>"+"</Description>
+          <ID>0</ID>
+        </Hotkey>
+      </Hotkeys>
+    </CheatEntry>
+    <CheatEntry>
+      <ID>155</ID>
+      <Description>"Lightning/Glacier; Level #"</Description>
+      <ShowAsSigned>0</ShowAsSigned>
+      <VariableType>2 Bytes</VariableType>
+      <Address>"popcapgame1.exe"+00487F34</Address>
+      <Offsets>
+        <Offset>E0C</Offset>
+        <Offset>BE0</Offset>
+      </Offsets>
+    </CheatEntry>
+    <CheatEntry>
+      <ID>156</ID>
+      <Description>"Poker; Card type (Card #0)*"</Description>
+      <ShowAsHex>1</ShowAsHex>
+      <ShowAsSigned>0</ShowAsSigned>
+      <VariableType>2 Bytes</VariableType>
+      <Address>"popcapgame1.exe"+00487F34</Address>
+      <Offsets>
+        <Offset>3238</Offset>
+        <Offset>BE0</Offset>
+      </Offsets>
+      <CheatEntries>
+        <CheatEntry>
+          <ID>157</ID>
+          <Description>"Poker; Secondary card type (Card #0)*"</Description>
+          <ShowAsHex>1</ShowAsHex>
+          <ShowAsSigned>0</ShowAsSigned>
+          <VariableType>2 Bytes</VariableType>
+          <Address>"popcapgame1.exe"+00487F34</Address>
+          <Offsets>
+            <Offset>323C</Offset>
+            <Offset>BE0</Offset>
+          </Offsets>
+        </CheatEntry>
+        <CheatEntry>
+          <ID>158</ID>
+          <Description>"Poker; Special card type (Card #0)***"</Description>
+          <ShowAsHex>1</ShowAsHex>
+          <VariableType>2 Bytes</VariableType>
+          <Address>"popcapgame1.exe"+00487F34</Address>
+          <Offsets>
+            <Offset>3240</Offset>
+            <Offset>BE0</Offset>
+          </Offsets>
+        </CheatEntry>
+      </CheatEntries>
+    </CheatEntry>
+    <CheatEntry>
+      <ID>159</ID>
+      <Description>"Poker; Card type (Card #1)*"</Description>
+      <ShowAsHex>1</ShowAsHex>
+      <VariableType>2 Bytes</VariableType>
+      <Address>"popcapgame1.exe"+00487F34</Address>
+      <Offsets>
+        <Offset>3330</Offset>
+        <Offset>BE0</Offset>
+      </Offsets>
+      <CheatEntries>
+        <CheatEntry>
+          <ID>160</ID>
+          <Description>"Poker; Secondary card type (Card #1)*"</Description>
+          <ShowAsHex>1</ShowAsHex>
+          <VariableType>2 Bytes</VariableType>
+          <Address>"popcapgame1.exe"+00487F34</Address>
+          <Offsets>
+            <Offset>3334</Offset>
+            <Offset>BE0</Offset>
+          </Offsets>
+        </CheatEntry>
+        <CheatEntry>
+          <ID>161</ID>
+          <Description>"Poker; Special card type (Card #1)***"</Description>
+          <ShowAsHex>1</ShowAsHex>
+          <VariableType>2 Bytes</VariableType>
+          <Address>"popcapgame1.exe"+00487F34</Address>
+          <Offsets>
+            <Offset>3338</Offset>
+            <Offset>BE0</Offset>
+          </Offsets>
+        </CheatEntry>
+      </CheatEntries>
+    </CheatEntry>
+    <CheatEntry>
+      <ID>162</ID>
+      <Description>"Poker; Card type (Card #2)*"</Description>
+      <ShowAsHex>1</ShowAsHex>
+      <VariableType>2 Bytes</VariableType>
+      <Address>"popcapgame1.exe"+00487F34</Address>
+      <Offsets>
+        <Offset>3428</Offset>
+        <Offset>BE0</Offset>
+      </Offsets>
+      <CheatEntries>
+        <CheatEntry>
+          <ID>163</ID>
+          <Description>"Poker; Secondary card type (Card #2)*"</Description>
+          <ShowAsHex>1</ShowAsHex>
+          <VariableType>2 Bytes</VariableType>
+          <Address>"popcapgame1.exe"+00487F34</Address>
+          <Offsets>
+            <Offset>342C</Offset>
+            <Offset>BE0</Offset>
+          </Offsets>
+        </CheatEntry>
+        <CheatEntry>
+          <ID>164</ID>
+          <Description>"Poker; Special card type (Card #2)***"</Description>
+          <ShowAsHex>1</ShowAsHex>
+          <VariableType>2 Bytes</VariableType>
+          <Address>"popcapgame1.exe"+00487F34</Address>
+          <Offsets>
+            <Offset>3430</Offset>
+            <Offset>BE0</Offset>
+          </Offsets>
+        </CheatEntry>
+      </CheatEntries>
+    </CheatEntry>
+    <CheatEntry>
+      <ID>165</ID>
+      <Description>"Poker; Card type (Card #3)*"</Description>
+      <ShowAsHex>1</ShowAsHex>
+      <VariableType>2 Bytes</VariableType>
+      <Address>"popcapgame1.exe"+00487F34</Address>
+      <Offsets>
+        <Offset>3520</Offset>
+        <Offset>BE0</Offset>
+      </Offsets>
+      <CheatEntries>
+        <CheatEntry>
+          <ID>166</ID>
+          <Description>"Poker; Secondary card type (Card #3)*"</Description>
+          <ShowAsHex>1</ShowAsHex>
+          <VariableType>2 Bytes</VariableType>
+          <Address>"popcapgame1.exe"+00487F34</Address>
+          <Offsets>
+            <Offset>3524</Offset>
+            <Offset>BE0</Offset>
+          </Offsets>
+        </CheatEntry>
+        <CheatEntry>
+          <ID>167</ID>
+          <Description>"Poker; Special card type (Card #3)***"</Description>
+          <ShowAsHex>1</ShowAsHex>
+          <VariableType>2 Bytes</VariableType>
+          <Address>"popcapgame1.exe"+00487F34</Address>
+          <Offsets>
+            <Offset>3528</Offset>
+            <Offset>BE0</Offset>
+          </Offsets>
+        </CheatEntry>
+      </CheatEntries>
+    </CheatEntry>
+    <CheatEntry>
+      <ID>168</ID>
+      <Description>"Poker; Card type (Card #4)*"</Description>
+      <ShowAsHex>1</ShowAsHex>
+      <VariableType>2 Bytes</VariableType>
+      <Address>"popcapgame1.exe"+00487F34</Address>
+      <Offsets>
+        <Offset>3618</Offset>
+        <Offset>BE0</Offset>
+      </Offsets>
+      <CheatEntries>
+        <CheatEntry>
+          <ID>169</ID>
+          <Description>"Poker; Secondary card type (Card #4)*"</Description>
+          <ShowAsHex>1</ShowAsHex>
+          <VariableType>2 Bytes</VariableType>
+          <Address>"popcapgame1.exe"+00487F34</Address>
+          <Offsets>
+            <Offset>361C</Offset>
+            <Offset>BE0</Offset>
+          </Offsets>
+        </CheatEntry>
+        <CheatEntry>
+          <ID>170</ID>
+          <Description>"Poker; Special card type (Card #4)***"</Description>
+          <ShowAsHex>1</ShowAsHex>
+          <VariableType>2 Bytes</VariableType>
+          <Address>"popcapgame1.exe"+00487F34</Address>
+          <Offsets>
+            <Offset>3620</Offset>
+            <Offset>BE0</Offset>
+          </Offsets>
+        </CheatEntry>
+      </CheatEntries>
+    </CheatEntry>
+    <CheatEntry>
+      <ID>171</ID>
+      <Description>"Butterflies; Butterflies #"</Description>
+      <VariableType>4 Bytes</VariableType>
+      <Address>"popcapgame1.exe"+00487F34</Address>
+      <Offsets>
+        <Offset>CF0</Offset>
+        <Offset>BE0</Offset>
+      </Offsets>
+    </CheatEntry>
+    <CheatEntry>
+      <ID>172</ID>
+      <Description>"Mission; General statistics by game type**"</Description>
+      <VariableType>4 Bytes</VariableType>
+      <Address>"popcapgame1.exe"+00487F34</Address>
+      <Offsets>
+        <Offset>E00</Offset>
+        <Offset>BE0</Offset>
+      </Offsets>
+    </CheatEntry>
+    <CheatEntry>
+      <ID>173</ID>
+      <Description>"Mission; Strategy/Alchemy; Movements remaining #"</Description>
+      <VariableType>4 Bytes</VariableType>
+      <Address>"popcapgame1.exe"+00487F34</Address>
+      <Offsets>
+        <Offset>323C</Offset>
+        <Offset>BE0</Offset>
+      </Offsets>
+    </CheatEntry>
+    <CheatEntry>
+      <ID>174</ID>
+      <Description>"Mission; Balance; Red gems #"</Description>
+      <VariableType>4 Bytes</VariableType>
+      <Address>"popcapgame1.exe"+00487F34</Address>
+      <Offsets>
+        <Offset>3250</Offset>
+        <Offset>BE0</Offset>
+      </Offsets>
+    </CheatEntry>
+    <CheatEntry>
+      <ID>175</ID>
+      <Description>"Mission; Balance; Blue gems #"</Description>
+      <VariableType>4 Bytes</VariableType>
+      <Address>"popcapgame1.exe"+00487F34</Address>
+      <Offsets>
+        <Offset>324C</Offset>
+        <Offset>BE0</Offset>
+      </Offsets>
+    </CheatEntry>
+  </CheatEntries>
+  <UserdefinedSymbols>
+    <SymbolEntry>
+      <Name>randomvalue</Name>
+      <Address>01270000</Address>
+    </SymbolEntry>
+    <SymbolEntry>
+      <Name>InitializeSpeedhack</Name>
+      <Address>57DFE70</Address>
+    </SymbolEntry>
+    <SymbolEntry>
+      <Name>speedhack-i386.dll!InitializeSpeedhack</Name>
+      <Address>57DFE70</Address>
+    </SymbolEntry>
+    <SymbolEntry>
+      <Name>speedhack-i386.dll.InitializeSpeedhack</Name>
+      <Address>57DFE70</Address>
+    </SymbolEntry>
+    <SymbolEntry>
+      <Name>realGetTickCount</Name>
+      <Address>57EB630</Address>
+    </SymbolEntry>
+    <SymbolEntry>
+      <Name>speedhack-i386.dll!realGetTickCount</Name>
+      <Address>57EB630</Address>
+    </SymbolEntry>
+    <SymbolEntry>
+      <Name>speedhack-i386.dll.realGetTickCount</Name>
+      <Address>57EB630</Address>
+    </SymbolEntry>
+    <SymbolEntry>
+      <Name>realQueryPerformanceCounter</Name>
+      <Address>57EB640</Address>
+    </SymbolEntry>
+    <SymbolEntry>
+      <Name>speedhack-i386.dll!realQueryPerformanceCounter</Name>
+      <Address>57EB640</Address>
+    </SymbolEntry>
+    <SymbolEntry>
+      <Name>speedhack-i386.dll.realQueryPerformanceCounter</Name>
+      <Address>57EB640</Address>
+    </SymbolEntry>
+    <SymbolEntry>
+      <Name>speedhackversion_GetTickCount</Name>
+      <Address>57DFD30</Address>
+    </SymbolEntry>
+    <SymbolEntry>
+      <Name>speedhack-i386.dll!speedhackversion_GetTickCount</Name>
+      <Address>57DFD30</Address>
+    </SymbolEntry>
+    <SymbolEntry>
+      <Name>speedhack-i386.dll.speedhackversion_GetTickCount</Name>
+      <Address>57DFD30</Address>
+    </SymbolEntry>
+    <SymbolEntry>
+      <Name>speedhackversion_QueryPerformanceCounter</Name>
+      <Address>57DFDB0</Address>
+    </SymbolEntry>
+    <SymbolEntry>
+      <Name>speedhack-i386.dll!speedhackversion_QueryPerformanceCounter</Name>
+      <Address>57DFDB0</Address>
+    </SymbolEntry>
+    <SymbolEntry>
+      <Name>speedhack-i386.dll.speedhackversion_QueryPerformanceCounter</Name>
+      <Address>57DFDB0</Address>
+    </SymbolEntry>
+    <SymbolEntry>
+      <Name>CEHasHandledItEvent</Name>
+      <Address>649E120</Address>
+    </SymbolEntry>
+    <SymbolEntry>
+      <Name>allochook-i386.dll!CEHasHandledItEvent</Name>
+      <Address>649E120</Address>
+    </SymbolEntry>
+    <SymbolEntry>
+      <Name>allochook-i386.dll.CEHasHandledItEvent</Name>
+      <Address>649E120</Address>
+    </SymbolEntry>
+    <SymbolEntry>
+      <Name>CEInitializationFinished</Name>
+      <Address>649E130</Address>
+    </SymbolEntry>
+    <SymbolEntry>
+      <Name>allochook-i386.dll!CEInitializationFinished</Name>
+      <Address>649E130</Address>
+    </SymbolEntry>
+    <SymbolEntry>
+      <Name>allochook-i386.dll.CEInitializationFinished</Name>
+      <Address>649E130</Address>
+    </SymbolEntry>
+    <SymbolEntry>
+      <Name>CeAllocateVirtualMemory</Name>
+      <Address>648BE00</Address>
+    </SymbolEntry>
+    <SymbolEntry>
+      <Name>allochook-i386.dll!CeAllocateVirtualMemory</Name>
+      <Address>648BE00</Address>
+    </SymbolEntry>
+    <SymbolEntry>
+      <Name>allochook-i386.dll.CeAllocateVirtualMemory</Name>
+      <Address>648BE00</Address>
+    </SymbolEntry>
+    <SymbolEntry>
+      <Name>CeFreeVirtualMemory</Name>
+      <Address>648BEF0</Address>
+    </SymbolEntry>
+    <SymbolEntry>
+      <Name>allochook-i386.dll!CeFreeVirtualMemory</Name>
+      <Address>648BEF0</Address>
+    </SymbolEntry>
+    <SymbolEntry>
+      <Name>allochook-i386.dll.CeFreeVirtualMemory</Name>
+      <Address>648BEF0</Address>
+    </SymbolEntry>
+    <SymbolEntry>
+      <Name>CeInitializeAllocHook</Name>
+      <Address>648B9E0</Address>
+    </SymbolEntry>
+    <SymbolEntry>
+      <Name>allochook-i386.dll!CeInitializeAllocHook</Name>
+      <Address>648B9E0</Address>
+    </SymbolEntry>
+    <SymbolEntry>
+      <Name>allochook-i386.dll.CeInitializeAllocHook</Name>
+      <Address>648B9E0</Address>
+    </SymbolEntry>
+    <SymbolEntry>
+      <Name>CeRtlAllocateHeap</Name>
+      <Address>648BC30</Address>
+    </SymbolEntry>
+    <SymbolEntry>
+      <Name>allochook-i386.dll!CeRtlAllocateHeap</Name>
+      <Address>648BC30</Address>
+    </SymbolEntry>
+    <SymbolEntry>
+      <Name>allochook-i386.dll.CeRtlAllocateHeap</Name>
+      <Address>648BC30</Address>
+    </SymbolEntry>
+    <SymbolEntry>
+      <Name>CeRtlDestroyHeap</Name>
+      <Address>648BD80</Address>
+    </SymbolEntry>
+    <SymbolEntry>
+      <Name>allochook-i386.dll!CeRtlDestroyHeap</Name>
+      <Address>648BD80</Address>
+    </SymbolEntry>
+    <SymbolEntry>
+      <Name>allochook-i386.dll.CeRtlDestroyHeap</Name>
+      <Address>648BD80</Address>
+    </SymbolEntry>
+    <SymbolEntry>
+      <Name>CeRtlFreeHeap</Name>
+      <Address>648BCE0</Address>
+    </SymbolEntry>
+    <SymbolEntry>
+      <Name>allochook-i386.dll!CeRtlFreeHeap</Name>
+      <Address>648BCE0</Address>
+    </SymbolEntry>
+    <SymbolEntry>
+      <Name>allochook-i386.dll.CeRtlFreeHeap</Name>
+      <Address>648BCE0</Address>
+    </SymbolEntry>
+    <SymbolEntry>
+      <Name>HasSetupDataEvent</Name>
+      <Address>649E110</Address>
+    </SymbolEntry>
+    <SymbolEntry>
+      <Name>allochook-i386.dll!HasSetupDataEvent</Name>
+      <Address>649E110</Address>
+    </SymbolEntry>
+    <SymbolEntry>
+      <Name>allochook-i386.dll.HasSetupDataEvent</Name>
+      <Address>649E110</Address>
+    </SymbolEntry>
+    <SymbolEntry>
+      <Name>HookEventData</Name>
+      <Address>649E0E0</Address>
+    </SymbolEntry>
+    <SymbolEntry>
+      <Name>allochook-i386.dll!HookEventData</Name>
+      <Address>649E0E0</Address>
+    </SymbolEntry>
+    <SymbolEntry>
+      <Name>allochook-i386.dll.HookEventData</Name>
+      <Address>649E0E0</Address>
+    </SymbolEntry>
+    <SymbolEntry>
+      <Name>NtAllocateVirtualMemoryOrig</Name>
+      <Address>649E090</Address>
+    </SymbolEntry>
+    <SymbolEntry>
+      <Name>allochook-i386.dll!NtAllocateVirtualMemoryOrig</Name>
+      <Address>649E090</Address>
+    </SymbolEntry>
+    <SymbolEntry>
+      <Name>allochook-i386.dll.NtAllocateVirtualMemoryOrig</Name>
+      <Address>649E090</Address>
+    </SymbolEntry>
+    <SymbolEntry>
+      <Name>NtFreeVirtualMemoryOrig</Name>
+      <Address>649E0A0</Address>
+    </SymbolEntry>
+    <SymbolEntry>
+      <Name>allochook-i386.dll!NtFreeVirtualMemoryOrig</Name>
+      <Address>649E0A0</Address>
+    </SymbolEntry>
+    <SymbolEntry>
+      <Name>allochook-i386.dll.NtFreeVirtualMemoryOrig</Name>
+      <Address>649E0A0</Address>
+    </SymbolEntry>
+    <SymbolEntry>
+      <Name>RtlAllocateHeapOrig</Name>
+      <Address>649E0B0</Address>
+    </SymbolEntry>
+    <SymbolEntry>
+      <Name>allochook-i386.dll!RtlAllocateHeapOrig</Name>
+      <Address>649E0B0</Address>
+    </SymbolEntry>
+    <SymbolEntry>
+      <Name>allochook-i386.dll.RtlAllocateHeapOrig</Name>
+      <Address>649E0B0</Address>
+    </SymbolEntry>
+    <SymbolEntry>
+      <Name>RtlDestroyHeapOrig</Name>
+      <Address>649E0D0</Address>
+    </SymbolEntry>
+    <SymbolEntry>
+      <Name>allochook-i386.dll!RtlDestroyHeapOrig</Name>
+      <Address>649E0D0</Address>
+    </SymbolEntry>
+    <SymbolEntry>
+      <Name>allochook-i386.dll.RtlDestroyHeapOrig</Name>
+      <Address>649E0D0</Address>
+    </SymbolEntry>
+    <SymbolEntry>
+      <Name>RtlFreeHeapOrig</Name>
+      <Address>649E0C0</Address>
+    </SymbolEntry>
+    <SymbolEntry>
+      <Name>allochook-i386.dll!RtlFreeHeapOrig</Name>
+      <Address>649E0C0</Address>
+    </SymbolEntry>
+    <SymbolEntry>
+      <Name>allochook-i386.dll.RtlFreeHeapOrig</Name>
+      <Address>649E0C0</Address>
+    </SymbolEntry>
+  </UserdefinedSymbols>
+  <Comments>(*)
+0: Red gem
+1: Silver gem
+2: Green gem
+3: Yellow gem
+4: Purple gem
+5: Orange gem
+6: Blue gem
+(**)
+Game type			Statistic type
+Butterflies			Butterflies remaining #
+Gold Rush			Gold nuggets #
+Alchemy				Gold parts #
+Strategy			Jewels destroyed #
+Balance				Red &amp; blue jewels #
+Avalanche			Jewels destroyed #
+Treasure hunter/Sirocco		Treasures #
+Countdown			Bomb jewels #
+Poker				Score
+Glacier				Jewels destroyed #
+Explosion			Wall destroyed parts #
+(***)
+0: (Nothing)
+1: Wildcard
+2: Flame gem
+3: Star gem
+(****)
+Num0	0:	Red
+Num1	1:	Platinum
+Num2	2:	Green
+Num3	3:	Yellow
+Num4	4:	Purple
+Num5	5:	Orange
+Num6	6:	Blue
+</Comments>
+</CheatTable>
