@@ -1,2 +1,2 @@
 # Bejeweled3WorldChampionshipSet
-python application that latches onto bejeweled 3's memory addresses to create a nwc type challenge
+A Python application that latches onto Bejeweled 3's memory addresses to create a Nintendo World Championships type challenge.
