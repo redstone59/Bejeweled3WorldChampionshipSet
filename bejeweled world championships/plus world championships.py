@@ -2,7 +2,6 @@ from ReadWriteMemory import ReadWriteMemory #install
 import json
 import psutil #install
 from tkinter import filedialog
-import math
 import os,sys
 
 p = os.path.dirname(os.path.abspath(sys.argv[0]))
@@ -46,16 +45,32 @@ def checkGameOpen():
         print('Bejeweled 3 found!')
         global game
         game=ReadWriteMemory().get_process_by_name('popcapgame1.exe')
-        print(game)
+        game.open()
+
+def addscores():
+    global finalscore
+    finalscore=0
+    print('---------------')
+    print('Final Score:')
+    for x in range (1,i):
+        subscript=list(questjson)[x]
+        currentquest=questjson[subscript]
+        exec("print(currentquest['objective'] +': ' + str(umscore" + str(x) + ") + ' * ' + str(currentquest['multiplier']) + ' = ' + str(score" + str(x) + "))")
+        exec("finalscore = finalscore + score" + str(x),globals())
+    print("FINAL SCORE : " + str(finalscore))
+
 
 def subchallenge(id):
+    global score
     score=input('type test score: ')
-    exec('score' + str(x-1) + '=score*currentquest["multiplier"]')
+    exec('score' + str(i) + '=int(score)*int(currentquest["multiplier"])',globals())
+    exec('umscore' + str(i) + '=int(score)',globals())
+
 #checkGameOpen()
 openchal()
 strs=json.load(open(p + '\\jsons\\strings.json'))
 aflags=json.load(open(p + '\\jsons\\allowedflags.json'))
-global x
+i=0
 for x in questjson:
     currentquest=questjson[x]
     if x=='challengeinfo': #print challenge metadata
@@ -66,6 +81,7 @@ for x in questjson:
         else:
             print('Marathon challenge, '+ str(len(questjson)-1) + ' sub-challenges long.')
         print('')
+        i=i+1
         continue
     if aflags[currentquest['objective']].count(currentquest['flag']) == 0:
         print("Invalid flag for objective " + currentquest['objective'] + ". Valid flags are " + str(aflags[currentquest['objective']]).replace("'","")[1:][:-1])
@@ -91,3 +107,5 @@ for x in questjson:
             questdesc=questdesc.replace('xbx',str(currentquest['hand']) + 's')
     print(questdesc)
     subchallenge(currentquest['objective'])
+    i=i+1
+addscores()
