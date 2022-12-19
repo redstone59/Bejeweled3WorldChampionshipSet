@@ -5,6 +5,7 @@ from tkinter import filedialog
 import os,sys
 from pydbg import *
 import struct
+import time
 
 p = os.path.dirname(os.path.abspath(sys.argv[0]))
 questjson={}
@@ -49,6 +50,8 @@ def checkGameOpen():
         game=ReadWriteMemory().get_process_by_name('popcapgame1.exe')
         game.open()
         #base address find here
+        global addr
+        addr = int(input('type funky "popcapgame1.exe"+00487F34 here: '),base=16)
 
 
 def addscores():
@@ -63,15 +66,70 @@ def addscores():
         finalscore=finalscore + mscores[x-1]
     print("FINAL SCORE : " + f"{finalscore:,}")
 
+def checksubchal():
+    global score
+    global iscomplete
+    iscomplete=0
+    if currentquest['objective']=='Stratamax':
+        print('stratamax')
+        movepointer=game.read(addr+0xBE0)+0x323C
+        game.write(movepointer,currentquest['condition'])
+        while iscomplete==0:
+            if game.read(movepointer)<=0:
+                score=game.read(scpointer)
+                iscomplete=1
+                return
+    if currentquest['flag']=='value':
+        try:
+            if currentquest['timebonus']==1:
+                print('time bonus val')
+                timescore=int(currentquest['time'])*1000
+                while iscomplete==0:
+                    if game.read(scpointer)>=currentquest['condition']:
+                        score=timescore
+                        iscomplete=1
+                    time.sleep(0.001)
+                    if timescore>=1:
+                        timescore=timescore-1
+        except Exception as e:
+            print(e)
+            print('non timebonus val')
+            while iscomplete==0:
+                if game.read(scpointer)>=currentquest['condition']:
+                    score=game.read(scpointer)
+                    iscomplete=1
+    if currentquest['flag']=='timed':
+        print('timed chal')
+        time.sleep(currentquest['time'])
+        score=game.read(scpointer)
+        iscomplete=1
+    elif currentquest['flag']=='endless':
+        print('endless chal')
+        input('hit enter to end i havent made a thing that does time yet')
+        score=game.read(scpointer)
+
 def subchallenge(id):
-    score=input('type test score: ')
+    #find pointer
+    global game
+    game.open()
+    scoffset=offset[id]
+    global scpointer
+    scpointer=game.read(addr+int(scoffset[0],base=16))
+    for m in range (1,len(scoffset)):
+        scpointer=scpointer+int(scoffset[m],base=16)
+    print(hex(scpointer))
+    print('GO!')
+    checksubchal()
+    #score stuffs
+    print(score)
     mscores.append(int(score)*int(currentquest['multiplier']))
     umscores.append(int(score))
 
-#checkGameOpen()
+checkGameOpen()
 openchal()
 strs=json.load(open(p + '\\jsons\\strings.json'))
 aflags=json.load(open(p + '\\jsons\\allowedflags.json'))
+offset=json.load(open(p + '\\jsons\\offsets.json'))
 i=0
 mscores=[]
 umscores=[]
@@ -99,17 +157,26 @@ for x in questjson:
         timesuffix=' until the challenge ends'
         questdesc=str(strs[currentquest['objective'] + 't'] + timesuffix + "!")
     else:
+        if currentquest['objective']=='ClasLevel' or currentquest['objective']=='ZenLevel':
+            sccond=str(currentquest['condition']+1)
+        else:
+            sccond=str(currentquest['condition'])
         try:
             if currentquest['timebonus']==1:
-                questdesc=str(strs[currentquest['objective']].replace('zxc',str(currentquest['condition'])) + " as quickly as possible!")
+                questdesc=str(strs[currentquest['objective']].replace('zxc',sccond) + " as quickly as possible!")
         except:
-            questdesc=str(strs[currentquest['objective']].replace('zxc',str(currentquest['condition'])) + "!")
+            questdesc=str(strs[currentquest['objective']].replace('zxc',sccond) + "!")
     if currentquest['objective']=="PokerHand":
         if currentquest['flag']=='value' and currentquest['condition']==1:
                 questdesc=questdesc.replace('xbx',str(currentquest['hand']))
         else:
             questdesc=questdesc.replace('xbx',str(currentquest['hand']) + 's')
     print(questdesc)
+    waittime=15
+    while waittime>0:
+        print('You have ' + str(waittime) + ' seconds to get to the gamemode')
+        time.sleep(1)
+        waittime=waittime-1
     subchallenge(currentquest['objective'])
     i=i+1
 addscores()
