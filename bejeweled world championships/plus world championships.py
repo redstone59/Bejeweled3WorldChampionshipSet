@@ -59,10 +59,9 @@ def addscores():
     for x in range (1,i):
         subscript=list(questjson)[x]
         currentquest=questjson[subscript]
-        print(currentquest['objective'] + ' : ' + str(umscores[x-1]) + ' * ' + str(currentquest['multiplier']) + ' = ' + str(mscores[x-1]))
+        print(currentquest['objective'] + ' : ' + f"{umscores[x-1]:,}" + ' * ' + f"{currentquest['multiplier']:,}" + ' = ' + f"{mscores[x-1]:,}")
         finalscore=finalscore + mscores[x-1]
-    print("FINAL SCORE : " + str(finalscore))
-
+    print("FINAL SCORE : " + f"{finalscore:,}")
 
 def subchallenge(id):
     score=input('type test score: ')
