@@ -32,6 +32,7 @@
     "WallBlast":"Wall Blast: Destroy zxc wall tiles",
     "Treasure":"Buried Treasure: Uncover zxc treasures",
     "Sand":"Sandstorm: Uncover zxc fossil fragments",
+    "Blaster":"Clear zxc gems in one move",
     
     "Classict":"Classic: Score as many points as you can",
     "Zent":"Zen: Score as many points as you can",
@@ -60,5 +61,6 @@
     "TimeBombt":"Time Bomb: Eliminate as many bombs as you can",
     "MatchBombt":"Match Bomb: Eliminate as many bombs as you can",
     "Avalanchet":"Avalanche: Clear as many gems before the board fills completely",
-    "WallBlastt":"Wall Blast: Destroy as many wall tiles as you can with"
+    "WallBlastt":"Wall Blast: Destroy as many wall tiles as you can with",
+    "Blastert":"Clear the most amount of gems in one move"
 }

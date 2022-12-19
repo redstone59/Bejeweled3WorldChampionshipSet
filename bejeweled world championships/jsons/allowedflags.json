@@ -31,5 +31,6 @@
     "Avalanche":["value","timed","endless"],
     "WallBlast":["value","timed"],
     "Treasure":["value"],
-    "Sand":["value"]
+    "Sand":["value"],
+    "Blaster":["value","timed"]
 }
