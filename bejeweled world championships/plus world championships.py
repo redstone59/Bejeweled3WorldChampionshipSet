@@ -3,6 +3,8 @@ import json
 import psutil #install
 from tkinter import filedialog
 import os,sys
+from pydbg import *
+import struct
 
 p = os.path.dirname(os.path.abspath(sys.argv[0]))
 questjson={}
@@ -46,6 +48,8 @@ def checkGameOpen():
         global game
         game=ReadWriteMemory().get_process_by_name('popcapgame1.exe')
         game.open()
+        #base address find here
+
 
 def addscores():
     global finalscore
@@ -55,22 +59,23 @@ def addscores():
     for x in range (1,i):
         subscript=list(questjson)[x]
         currentquest=questjson[subscript]
-        exec("print(currentquest['objective'] +': ' + str(umscore" + str(x) + ") + ' * ' + str(currentquest['multiplier']) + ' = ' + str(score" + str(x) + "))")
-        exec("finalscore = finalscore + score" + str(x),globals())
+        print(currentquest['objective'] + ' : ' + str(umscores[x-1]) + ' * ' + str(currentquest['multiplier']) + ' = ' + str(mscores[x-1]))
+        finalscore=finalscore + mscores[x-1]
     print("FINAL SCORE : " + str(finalscore))
 
 
 def subchallenge(id):
-    global score
     score=input('type test score: ')
-    exec('score' + str(i) + '=int(score)*int(currentquest["multiplier"])',globals())
-    exec('umscore' + str(i) + '=int(score)',globals())
+    mscores.append(int(score)*int(currentquest['multiplier']))
+    umscores.append(int(score))
 
 #checkGameOpen()
 openchal()
 strs=json.load(open(p + '\\jsons\\strings.json'))
 aflags=json.load(open(p + '\\jsons\\allowedflags.json'))
 i=0
+mscores=[]
+umscores=[]
 for x in questjson:
     currentquest=questjson[x]
     if x=='challengeinfo': #print challenge metadata
