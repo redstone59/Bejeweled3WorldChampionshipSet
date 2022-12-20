@@ -1,5 +1,5 @@
 {
-    "Cascade":"Get a cascade of zxc",
+    "Cascade":"All (but Zen, Diamond Mine, and Quests): Get a cascade of zxc",
     "Classic":"Classic: Score zxc points",
     "Zen":"Zen: Score zxc points",
     "Lightning":"Lightning: Score zxc points",
@@ -21,7 +21,6 @@
     "IceCombo":"Ice Storm: Get a column combo of zxc",
     "DiamondDepth":"Diamond Mine: Get to a depth of zxc metres",
     "DiamondTreasure":"Diamond Mine: Get zxc treasures",
-    "DiamondTime":"Diamond Mine: Fill the timer bar to zxc",
     "Balance":"Balance: Balance zxc gems",
     "Stratamax":"Stratamax: Clear as many gems as you can in zxc moves",
     "GoldRush":"Gold Rush: Mine zxc gold",
@@ -32,7 +31,7 @@
     "WallBlast":"Wall Blast: Destroy zxc wall tiles",
     "Treasure":"Buried Treasure: Uncover zxc treasures",
     "Sand":"Sandstorm: Uncover zxc fossil fragments",
-    "Blaster":"Clear zxc gems in one move",
+    "Blaster":"All (but Zen, Diamond Mine, and Quests): Clear zxc gems in one move",
     
     "Classict":"Classic: Score as many points as you can",
     "Zent":"Zen: Score as many points as you can",
@@ -55,12 +54,10 @@
     "IceCombot":"Ice Storm: Get the highest column combo you can get",
     "DiamondDeptht":"Diamond Mine: Get as deep as you can",
     "DiamondTreasuret":"Diamond Mine: Get as many treasures as you can",
-    "DiamondTimet":"Diamond Mine: Fill the timer bar as high as you can",
     "Balancet":"Balance: Match as many gems as you can",
     "Alchemyt":"Alchemy: Turn as many squares into gold with",
     "TimeBombt":"Time Bomb: Eliminate as many bombs as you can",
     "MatchBombt":"Match Bomb: Eliminate as many bombs as you can",
     "Avalanchet":"Avalanche: Clear as many gems before the board fills completely",
-    "WallBlastt":"Wall Blast: Destroy as many wall tiles as you can with",
-    "Blastert":"Clear the most amount of gems in one move"
+    "WallBlastt":"Wall Blast: Destroy as many wall tiles as you can with"
 }
