@@ -36,7 +36,7 @@
     </CheatEntry>
     <CheatEntry>
       <ID>152</ID>
-      <Description>"Classic/Zen; Cascade # (if &gt;12)"</Description>
+      <Description>"Classic/Zen; Gems cleared in 1 move # (if &gt;12)"</Description>
       <ShowAsSigned>0</ShowAsSigned>
       <VariableType>2 Bytes</VariableType>
       <Address>"popcapgame1.exe"+00487F34</Address>
@@ -44,6 +44,28 @@
         <Offset>22E8</Offset>
         <Offset>BE0</Offset>
       </Offsets>
+    </CheatEntry>
+    <CheatEntry>
+      <ID>193</ID>
+      <Description>"Cascade #"</Description>
+      <ShowAsSigned>0</ShowAsSigned>
+      <VariableType>4 Bytes</VariableType>
+      <Address>"popcapgame1.exe"+00487F34</Address>
+      <Offsets>
+        <Offset>2444</Offset>
+        <Offset>BE0</Offset>
+      </Offsets>
+      <Hotkeys>
+        <Hotkey>
+          <Action>Set Value</Action>
+          <Keys>
+            <Key>187</Key>
+          </Keys>
+          <Value>3FFFFFFF</Value>
+          <Description>"+"</Description>
+          <ID>0</ID>
+        </Hotkey>
+      </Hotkeys>
     </CheatEntry>
     <CheatEntry>
       <ID>153</ID>
@@ -58,7 +80,7 @@
     </CheatEntry>
     <CheatEntry>
       <ID>154</ID>
-      <Description>"Press "+" to activate Blazing Speed"</Description>
+      <Description>"Lightning: Blazing Speed Timer (press + to activate)"</Description>
       <ShowAsHex>1</ShowAsHex>
       <ShowAsSigned>0</ShowAsSigned>
       <VariableType>4 Bytes</VariableType>
@@ -116,7 +138,7 @@
       <ID>179</ID>
       <Description>"Poker: Number of Hands"</Description>
       <ShowAsSigned>0</ShowAsSigned>
-      <VariableType>2 Bytes</VariableType>
+      <VariableType>4 Bytes</VariableType>
       <Address>"popcapgame1.exe"+00487F34</Address>
       <Offsets>
         <Offset>3960</Offset>
@@ -312,12 +334,99 @@
       </CheatEntries>
     </CheatEntry>
     <CheatEntry>
+      <ID>180</ID>
+      <Description>"Poker: # of Pairs"</Description>
+      <ShowAsSigned>0</ShowAsSigned>
+      <VariableType>4 Bytes</VariableType>
+      <Address>"popcapgame1.exe"+00487F34</Address>
+      <Offsets>
+        <Offset>39D8</Offset>
+        <Offset>BE0</Offset>
+      </Offsets>
+    </CheatEntry>
+    <CheatEntry>
+      <ID>181</ID>
+      <Description>"Poker: # of Spectrums"</Description>
+      <ShowAsSigned>0</ShowAsSigned>
+      <VariableType>4 Bytes</VariableType>
+      <Address>"popcapgame1.exe"+00487F34</Address>
+      <Offsets>
+        <Offset>39DC</Offset>
+        <Offset>BE0</Offset>
+      </Offsets>
+    </CheatEntry>
+    <CheatEntry>
+      <ID>182</ID>
+      <Description>"Poker: # of 2 Pairs"</Description>
+      <ShowAsSigned>0</ShowAsSigned>
+      <VariableType>4 Bytes</VariableType>
+      <Address>"popcapgame1.exe"+00487F34</Address>
+      <Offsets>
+        <Offset>39E0</Offset>
+        <Offset>BE0</Offset>
+      </Offsets>
+    </CheatEntry>
+    <CheatEntry>
+      <ID>183</ID>
+      <Description>"Poker: # of 3oaKs"</Description>
+      <ShowAsSigned>0</ShowAsSigned>
+      <VariableType>4 Bytes</VariableType>
+      <Address>"popcapgame1.exe"+00487F34</Address>
+      <Offsets>
+        <Offset>39E4</Offset>
+        <Offset>BE0</Offset>
+      </Offsets>
+    </CheatEntry>
+    <CheatEntry>
+      <ID>184</ID>
+      <Description>"Poker: # of Full Houses"</Description>
+      <ShowAsSigned>0</ShowAsSigned>
+      <VariableType>4 Bytes</VariableType>
+      <Address>"popcapgame1.exe"+00487F34</Address>
+      <Offsets>
+        <Offset>39E8</Offset>
+        <Offset>BE0</Offset>
+      </Offsets>
+    </CheatEntry>
+    <CheatEntry>
+      <ID>185</ID>
+      <Description>"Poker: # of 4oaKs"</Description>
+      <ShowAsSigned>0</ShowAsSigned>
+      <VariableType>4 Bytes</VariableType>
+      <Address>"popcapgame1.exe"+00487F34</Address>
+      <Offsets>
+        <Offset>39EC</Offset>
+        <Offset>BE0</Offset>
+      </Offsets>
+    </CheatEntry>
+    <CheatEntry>
+      <ID>186</ID>
+      <Description>"Poker: # of Flushs"</Description>
+      <ShowAsSigned>0</ShowAsSigned>
+      <VariableType>4 Bytes</VariableType>
+      <Address>"popcapgame1.exe"+00487F34</Address>
+      <Offsets>
+        <Offset>39F0</Offset>
+        <Offset>BE0</Offset>
+      </Offsets>
+    </CheatEntry>
+    <CheatEntry>
       <ID>171</ID>
       <Description>"Butterflies; Butterflies #"</Description>
       <VariableType>4 Bytes</VariableType>
       <Address>"popcapgame1.exe"+00487F34</Address>
       <Offsets>
         <Offset>CF0</Offset>
+        <Offset>BE0</Offset>
+      </Offsets>
+    </CheatEntry>
+    <CheatEntry>
+      <ID>188</ID>
+      <Description>"Butterflies; Best Butterfly Combo"</Description>
+      <VariableType>4 Bytes</VariableType>
+      <Address>"popcapgame1.exe"+00487F34</Address>
+      <Offsets>
+        <Offset>CF4</Offset>
         <Offset>BE0</Offset>
       </Offsets>
     </CheatEntry>
@@ -359,6 +468,17 @@
       <Address>"popcapgame1.exe"+00487F34</Address>
       <Offsets>
         <Offset>324C</Offset>
+        <Offset>BE0</Offset>
+      </Offsets>
+    </CheatEntry>
+    <CheatEntry>
+      <ID>187</ID>
+      <Description>"Balance Goal"</Description>
+      <ShowAsSigned>0</ShowAsSigned>
+      <VariableType>4 Bytes</VariableType>
+      <Address>"popcapgame1.exe"+00487F34</Address>
+      <Offsets>
+        <Offset>3238</Offset>
         <Offset>BE0</Offset>
       </Offsets>
     </CheatEntry>
