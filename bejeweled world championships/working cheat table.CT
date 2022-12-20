@@ -91,6 +91,50 @@
       </Offsets>
     </CheatEntry>
     <CheatEntry>
+      <ID>176</ID>
+      <Description>"Ice Storm: Columns Broken"</Description>
+      <ShowAsSigned>0</ShowAsSigned>
+      <VariableType>4 Bytes</VariableType>
+      <Address>"popcapgame1.exe"+00487F34</Address>
+      <Offsets>
+        <Offset>CD0</Offset>
+        <Offset>BE0</Offset>
+      </Offsets>
+    </CheatEntry>
+    <CheatEntry>
+      <ID>177</ID>
+      <Description>"Ice Storm: Column Combo"</Description>
+      <ShowAsSigned>0</ShowAsSigned>
+      <VariableType>4 Bytes</VariableType>
+      <Address>"popcapgame1.exe"+00487F34</Address>
+      <Offsets>
+        <Offset>36B8</Offset>
+        <Offset>BE0</Offset>
+      </Offsets>
+    </CheatEntry>
+    <CheatEntry>
+      <ID>179</ID>
+      <Description>"Poker: Number of Hands"</Description>
+      <ShowAsSigned>0</ShowAsSigned>
+      <VariableType>2 Bytes</VariableType>
+      <Address>"popcapgame1.exe"+00487F34</Address>
+      <Offsets>
+        <Offset>3960</Offset>
+        <Offset>BE0</Offset>
+      </Offsets>
+    </CheatEntry>
+    <CheatEntry>
+      <ID>178</ID>
+      <Description>"Poker: Skulls Busted"</Description>
+      <ShowAsSigned>0</ShowAsSigned>
+      <VariableType>4 Bytes</VariableType>
+      <Address>"popcapgame1.exe"+00487F34</Address>
+      <Offsets>
+        <Offset>3964</Offset>
+        <Offset>BE0</Offset>
+      </Offsets>
+    </CheatEntry>
+    <CheatEntry>
       <ID>156</ID>
       <Description>"Poker; Card type (Card #0)*"</Description>
       <ShowAsHex>1</ShowAsHex>
@@ -310,6 +354,7 @@
     <CheatEntry>
       <ID>175</ID>
       <Description>"Mission; Balance; Blue gems #"</Description>
+      <ShowAsSigned>0</ShowAsSigned>
       <VariableType>4 Bytes</VariableType>
       <Address>"popcapgame1.exe"+00487F34</Address>
       <Offsets>

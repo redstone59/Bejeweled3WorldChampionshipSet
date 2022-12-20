@@ -70,6 +70,11 @@ def checksubchal():
     global score
     global iscomplete
     iscomplete=0
+    #modify miniquest goals
+    if currentquest['objective']=='Balance':
+        goalpointer=game.read(addr+0xBE0)+0x3238
+        win=currentquest['condition']/2
+        game.write(goalpointer,int(win))
     if currentquest['objective']=='Stratamax':
         print('stratamax')
         movepointer=game.read(addr+0xBE0)+0x323C
@@ -92,7 +97,6 @@ def checksubchal():
                     if timescore>=1:
                         timescore=timescore-1
         except Exception as e:
-            print(e)
             print('non timebonus val')
             while iscomplete==0:
                 if game.read(scpointer)>=currentquest['condition']:
