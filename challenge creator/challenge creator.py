@@ -123,6 +123,9 @@ def updatesc(n):
         if 'timebonus' in loadset.keys():
             timebon.set('1')
             timebonusenable()
+        if loadset['objective'] in ['Avalanche','Butterflies','ButterClear','ButterCombo','TimeBomb','MatchBomb']:
+            scext.delete(0,len(scext.get()))
+            sctime.insert(0,(str(int(loadset['qextra']))))
         updatedesctext()
     else:
         resetwidgets()
@@ -131,9 +134,20 @@ def updatesc(n):
 def handcheck(n):
     hanlbl.grid_forget()
     schand.grid_forget()
+    extlbl.grid_forget()
+    scext.grid_forget()
     if scobjective.get()=="PokerHand":
         hanlbl.grid(column=2,row=12)
         schand.grid(column=3,row=12,pady=5)
+    if scobjective.get() in ["Avalanche","Butterflies","ButterClear","ButterCombo","TimeBomb","MatchBomb"]:
+        if scobjective.get() =="Avalanche":
+            extlbl['text']='# gems/move'
+        if scobjective.get() in ['Butterflies','ButterClear','ButterCombo']:
+            extlbl['text']='# matches/move'
+        if scobjective.get() in ['TimeBomb','MatchBomb']:
+            extlbl['text']='Start bomb #'
+        extlbl.grid(column=2,row=13)
+        scext.grid(column=3,row=13)
 
 def updatetype():
     if timedchallenge.get()=='1':
@@ -178,6 +192,8 @@ def savesubchal(scn):
             subchal['time']=sctime.get()
     if scobjective.get()=="PokerHand":
         subchal['hand']=schand.get()
+    if scobjective.get() in ["Avalanche","Butterflies","ButterClear","ButterCombo","TimeBomb","MatchBomb"]:
+        subchal['qextra']=int(scext.get())
     subchal['multiplier']=int(mulbox.get())
     saveset('quest' + str(scn),subchal)
 
@@ -354,14 +370,18 @@ schand = ttk.Combobox(cr)
 schand['values']=['Pair','Spectrum','Two Pair','3 of a Kind','Full House','4 of a Kind','Flush']
 schand.bind('<<ComboboxSelected>>',lambda a:updatedesctext())
 
-ttk.Label(cr,text='Multiplier: ').grid(column=2,row=13,pady=2)
+extlbl=ttk.Label(text='Quest Extra')
+scext=ttk.Entry(cr)
+scext.bind('<<ComboboxSelected>>',lambda a:updatedesctext())
+
+ttk.Label(cr,text='Multiplier: ').grid(column=2,row=14,pady=2)
 mulbox = ttk.Spinbox(cr,from_=1,to=999)
 mulbox.set(1)
 mulbox.bind("<Enter>",lambda a:savesubchal(scselector.get().split()[0]))
-mulbox.grid(column=3,row=13)
+mulbox.grid(column=3,row=14)
 
 desctext=ttk.Label(cr)
 desctext['text']='Sub-challenge text will appear here'
-desctext.grid(column=1,row=14,columnspan=5,pady=5)
+desctext.grid(column=1,row=15,columnspan=5,pady=5)
 
 cr.mainloop()
