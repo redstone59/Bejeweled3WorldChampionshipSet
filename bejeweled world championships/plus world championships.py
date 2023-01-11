@@ -4,7 +4,7 @@ import psutil #install
 from tkinter import filedialog
 import os,sys
 from pydbg import *
-import struct
+import pymem
 import time
 
 p = os.path.dirname(os.path.abspath(sys.argv[0]))
@@ -49,9 +49,8 @@ def checkGameOpen():
         global game
         game=ReadWriteMemory().get_process_by_name('popcapgame1.exe')
         game.open()
-        #base address find here
         global addr
-        addr = int(input('type funky "popcapgame1.exe"+00487F34 here: '),base=16)
+        addr = game.read(0x400000+0x00487f34)
 
 
 def addscores():
@@ -65,6 +64,13 @@ def addscores():
         print(currentquest['objective'] + ' : ' + f"{umscores[x-1]:,}" + ' * ' + f"{currentquest['multiplier']:,}" + ' = ' + f"{mscores[x-1]:,}")
         finalscore=finalscore + mscores[x-1]
     print("FINAL SCORE : " + f"{finalscore:,}")
+
+def hasScoreDecreased():
+    global scorelastpass
+    if game.read(scorepointer) < scorelastpass:
+        print('Continuing to the next quest because the score has decreased (reset or game over)')
+        return True
+    scorelastpass=game.read(scorepointer)
 
 def checksubchal():
     global score
@@ -124,15 +130,21 @@ def checksubchal():
                 if game.read(scpointer)>=currentquest['condition']:
                     score=timescore
                     iscomplete=1
-                time.sleep(0.001)
                 if timescore>=1:
-                    timescore=timescore-1
+                    time.sleep(0.001)
+                    timescore-=1
+                if hasScoreDecreased():
+                    iscomplete=1
+                    continue
         else:
             print('non timebonus val')
             while iscomplete==0:
                 if game.read(scpointer)>=currentquest['condition']:
                     score=game.read(scorepointer)
                     iscomplete=1
+                if hasScoreDecreased():
+                    iscomplete=1
+                    continue
     if currentquest['flag']=='timed':
         print('timed chal')
         time.sleep(currentquest['time'])
@@ -165,7 +177,13 @@ def subchallenge(id):
         scorepointer=game.read(addr+0xBE0)+0xD20
     game.write(game.read(addr+0xBE0)+0xD20,0)
     game.write(game.read(addr+0xBE0)+0xE00,0)
+    if currentquest['objective'] not in ["ClasLevel","ZenLevel"]:
+        game.write(scpointer,0)
+    else:
+        game.write(scpointer,1)
     print('GO!')
+    global scorelastpass
+    scorelastpass=game.read(scorepointer)
     checksubchal()
     #score stuffs
     print(score)
