@@ -1,0 +1,16 @@
+{
+    "Butterflies":[1001],
+    "Poker":[1000],
+    "Ice Storm":[1002],
+    "Diamond Mine":[1003],
+    "Gold Rush":[1,21,24,36],
+    "Avalanche":[5,15,20,27,38],
+    "Stratamax":[3,10,22,31,34],
+    "Time Bomb":[14,29],
+    "Match Bomb":[7,23],
+    "Balance":[4,13,30,32],
+    "Alchemy":[2,16,26],
+    "Wall Blast":[17,35],
+    "Buried Treasure":[6],
+    "Sandstorm":[11,33]
+}

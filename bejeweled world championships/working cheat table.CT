@@ -36,7 +36,7 @@
     </CheatEntry>
     <CheatEntry>
       <ID>152</ID>
-      <Description>"Classic/Zen; Gems cleared in 1 move # (if &gt;12)"</Description>
+      <Description>"Classic/Zen; Gems cleared in 1 move"</Description>
       <ShowAsSigned>0</ShowAsSigned>
       <VariableType>2 Bytes</VariableType>
       <Address>"popcapgame1.exe"+00487F34</Address>
@@ -473,12 +473,56 @@
     </CheatEntry>
     <CheatEntry>
       <ID>187</ID>
-      <Description>"Balance Goal"</Description>
+      <Description>"Balance Goal / Extra Quest Option"</Description>
       <ShowAsSigned>0</ShowAsSigned>
       <VariableType>4 Bytes</VariableType>
       <Address>"popcapgame1.exe"+00487F34</Address>
       <Offsets>
         <Offset>3238</Offset>
+        <Offset>BE0</Offset>
+      </Offsets>
+    </CheatEntry>
+    <CheatEntry>
+      <ID>194</ID>
+      <Description>"Miniquest ID"</Description>
+      <ShowAsSigned>0</ShowAsSigned>
+      <VariableType>4 Bytes</VariableType>
+      <Address>"popcapgame1.exe"+00487F34</Address>
+      <Offsets>
+        <Offset>322C</Offset>
+        <Offset>BE0</Offset>
+      </Offsets>
+    </CheatEntry>
+    <CheatEntry>
+      <ID>195</ID>
+      <Description>"Poker Goal"</Description>
+      <ShowAsSigned>1</ShowAsSigned>
+      <VariableType>4 Bytes</VariableType>
+      <Address>"popcapgame1.exe"+00487F34</Address>
+      <Offsets>
+        <Offset>3958</Offset>
+        <Offset>BE0</Offset>
+      </Offsets>
+    </CheatEntry>
+    <CheatEntry>
+      <ID>196</ID>
+      <Description>"Poker Hands Left"</Description>
+      <ShowAsSigned>1</ShowAsSigned>
+      <VariableType>4 Bytes</VariableType>
+      <Address>"popcapgame1.exe"+00487F34</Address>
+      <Offsets>
+        <Offset>395C</Offset>
+        <Offset>BE0</Offset>
+      </Offsets>
+    </CheatEntry>
+    <CheatEntry>
+      <ID>197</ID>
+      <Description>"Gems Goal?"</Description>
+      <ShowAsSigned>1</ShowAsSigned>
+      <VariableType>4 Bytes</VariableType>
+      <Address>"popcapgame1.exe"+00487F34</Address>
+      <Offsets>
+        <Offset>E0</Offset>
         <Offset>BE0</Offset>
       </Offsets>
     </CheatEntry>

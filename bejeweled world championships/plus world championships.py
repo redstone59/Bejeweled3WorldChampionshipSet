@@ -4,10 +4,9 @@ import psutil #install
 from tkinter import filedialog
 import os,sys
 from pydbg import *
-import pymem
 import time
 
-p = os.path.dirname(os.path.abspath(sys.argv[0]))
+p = os.path.dirname(os.path.abspath(sys.argv[0])) #default path is the path the file is in (./)
 questjson={}
 
 def openchal():
@@ -69,13 +68,55 @@ def hasScoreDecreased():
     global scorelastpass
     if game.read(scorepointer) < scorelastpass:
         print('Continuing to the next quest because the score has decreased (reset or game over)')
+        global score
+        score=scorelastpass
         return True
     scorelastpass=game.read(scorepointer)
+
+def isTimeUp():
+    if time.time() >= endtime and endtime != 0: #check if time is up
+        global score
+        score=scorepointer
+        return True
 
 def checksubchal():
     global score
     global iscomplete
     iscomplete=0
+    score=0
+    #gem-based quests
+    if currentquest['objective'] in ["Avalanche"]: #still need to find GemGoal
+        if currentquest['flag'] == 'value':
+            game.write(game.read(addr+0xBE0)+0xE00,goals[str(game.read(addr+0xBE0)+0x322C)]-currentquest['condition'])
+        else:
+            game.write(game.read(addr+0xBE0)+0xE00,-10000)
+    #bomb quests
+    if currentquest['objective'] in ["TimeBomb","MatchBomb"]: #still need to find bomb goal (might even be the same as GemGoal)
+        if currentquest['flag'] == 'value':
+            game.write(scpointer,goals-currentquest['condition'])
+        else:
+            game.write(scpointer,-10000)
+    #gold rush quests
+    #move-based quests
+    #time-based quests
+    if currentquest['objective'] in ["BuriedTreasure","GoldRush","Sandstorm","WallBlast"]:
+        game.write(game.read(addr+0xBE0)+0x3238,1800) #change quest base time to 30 minutes
+    #poker quests
+    if currentquest['objective'] in ["Poker","PokerLimit","PokerHand","PokerSkull"]:
+        if game.read(game.read(addr+0xBE0)+0x323C) >= 1000: #check if miniquest id is not the one of the secret poker mode
+            game.write(game.read(addr+0xBE0)+0x3958,100000) #change PokerGoal to an absurdly high number
+            game.write(game.read(addr+0xBE0)+0x395C,1000) #change amount of hands remaining
+            print("you're really shooting yourself in the foot here by using the quest version")
+    #add extra quest option
+    if currentquest['objective'] in ["Avalanche","Butterflies","ButterClear","ButterCombo","MatchBomb","TimeBomb"]:
+        if 'qextra' in currentquest.keys():
+            game.write(game.read(addr+0xBE0)+0x3238,currentquest['qextra'])
+        elif currentquest['objective']=="Avalanche":
+            game.write(game.read(addr+0xBE0)+0x3238,5) #5 gems fall as default
+        elif currentquest['objective'] in ["Butterflies","ButterClear","ButterCombo"]:
+            game.write(game.read(addr+0xBE0)+0x3238,1) #1 match/move as default
+        elif currentquest['objective'] in ["MatchBomb","TimeBomb"]:
+            game.write(game.read(addr+0xBE0)+0x3238,30) #starting number of bombs is 30 (matches/seconds)
     #modify miniquest goals
     if currentquest['objective']=='Balance':
         if currentquest['flag']=='value':
@@ -95,36 +136,8 @@ def checksubchal():
                 score=game.read(scpointer)
                 iscomplete=1
                 return
-    #gem-based quests
-    if currentquest['objective'] in ["Avalanche","Stratamax"]: #still need to find GemGoal
-        print('yeah')
-    #bomb quests
-    if currentquest['objective'] in ["TimeBomb","MatchBomb"]:
-        pass
-    #gold rush quests
-    #move-based quests
-    #time-based quests
-    if currentquest['objective'] in ["BuriedTreasure","GoldRush","Sandstorm","WallBlast"]:
-        game.write(game.read(addr+0xBE0)+0x3238,1800) #change quest base time to 30 minutes
-    #poker quests
-    if currentquest['objective'] in ["Poker","PokerLimit","PokerHand","PokerSkull"]:
-        if game.read(game.read(addr+0xBE0)+0x323C) != 1000: #check if miniquest id is not the one of the secret poker mode
-            game.write(game.read(addr+0xBE0)+0x3958,100000) #change PokerGoal to an absurdly high number
-            game.write(game.read(addr+0xBE0)+0x395C,1000) #change amount of hands remaining
-            print("you're really shooting yourself in the foot here by using the quest version")
-    #add extra quest option
-    if currentquest['objective'] in ["Avalanche","Butterflies","ButterClear","ButterCombo","MatchBomb","TimeBomb"]:
-        if 'qextra' in currentquest.keys():
-            game.write(game.read(addr+0xBE0)+0x3238,currentquest['qextra'])
-        elif currentquest['objective']=="Avalanche":
-            game.write(game.read(addr+0xBE0)+0x3238,5) #5 gems fall as default
-        elif currentquest['objective'] in ["Butterflies","ButterClear","ButterCombo"]:
-            game.write(game.read(addr+0xBE0)+0x3238,1) #1 match/move as default
-        elif currentquest['objective'] in ["MatchBomb","TimeBomb"]:
-            game.write(game.read(addr+0xBE0)+0x3238,30) #starting number of bombs is 30 (matches/seconds)
     if currentquest['flag']=='value':
         if 'timebonus' in currentquest.keys():
-            print('time bonus val')
             timescore=int(currentquest['time'])*1000
             while iscomplete==0:
                 if game.read(scpointer)>=currentquest['condition']:
@@ -133,33 +146,37 @@ def checksubchal():
                 if timescore>=1:
                     time.sleep(0.001)
                     timescore-=1
-                if hasScoreDecreased():
+                if isTimeUp():
                     iscomplete=1
-                    continue
+                    break
+                game.write(scorepointer,timescore)
         else:
-            print('non timebonus val')
             while iscomplete==0:
                 if game.read(scpointer)>=currentquest['condition']:
                     score=game.read(scorepointer)
                     iscomplete=1
-                if hasScoreDecreased():
+                if hasScoreDecreased() or isTimeUp():
                     iscomplete=1
-                    continue
+                    break
     if currentquest['flag']=='timed':
-        print('timed chal')
-        time.sleep(currentquest['time'])
+        scendtime=time.time()+currentquest['time']
+        while time.time() <= scendtime:
+            if hasScoreDecreased() or isTimeUp():
+                    iscomplete=1
+                    break
         score=game.read(scorepointer)
         iscomplete=1
     elif currentquest['flag']=='endless':
-        print('endless chal')
-        input('hit enter to end i havent made a thing that does time yet')
+        while iscomplete==0:
+            if hasScoreDecreased() or isTimeUp():
+                    iscomplete=1
+                    break
         score=game.read(scorepointer)
 
 def subchallenge(id):
-    #find pointer
     global game
     game.open()
-    scoffset=offset[id]
+    scoffset=offset[id] #find offsets for pointer
     if currentquest['objective'] == 'PokerHand':
         handlist=['Pair','Spectrum','Two Pair','3 of a Kind','Full House','4 of a Kind','Flush']
         scoffset[1]=int(scoffset[1],base=16)
@@ -171,22 +188,18 @@ def subchallenge(id):
     for m in range (1,len(scoffset)):
         scpointer=scpointer+int(scoffset[m],base=16)
     global scorepointer
-    if mode[currentquest['objective']] == "Diamond Mine" or mode[currentquest['objective']] == "Quest":
+    if mode[currentquest['objective']] == "Diamond Mine": #or mode[currentquest['objective']] == "Quest":
         scorepointer=game.read(addr+0xBE0)+0xE00
     else:
         scorepointer=game.read(addr+0xBE0)+0xD20
     game.write(game.read(addr+0xBE0)+0xD20,0)
     game.write(game.read(addr+0xBE0)+0xE00,0)
-    if currentquest['objective'] not in ["ClasLevel","ZenLevel"]:
-        game.write(scpointer,0)
-    else:
-        game.write(scpointer,1)
+    game.write(scpointer,0)
     print('GO!')
     global scorelastpass
     scorelastpass=game.read(scorepointer)
     checksubchal()
     #score stuffs
-    print(score)
     del scoffset
     mscores.append(int(score)*int(currentquest['multiplier']))
     umscores.append(int(score))
@@ -198,16 +211,22 @@ strs=json.load(open(p + '\\jsons\\strings.json'))
 aflags=json.load(open(p + '\\jsons\\allowedflags.json'))
 mode=json.load(open(p + '\\jsons\\mode.json'))
 mqids=json.load(open(p + '\\jsons\\miniquestids.json'))
+goals=json.load(open(p + '\\jsons\\goals.json'))
 i=0
 mscores=[]
 umscores=[]
+endtime=0
 for x in questjson:
     currentquest=questjson[x]
+    if time.time() >= endtime and endtime != 0: #check if time is up
+        print("TIME!")
+        break
     if x=='challengeinfo': #print challenge metadata
         print(currentquest['name'] + " by " + currentquest['author'] + ".")
         print(currentquest['description'])
         if currentquest['type']=='timed':
             print(str(currentquest['time']) + 's timed challenge, ' + str(len(questjson)-1) + ' sub-challenges long.')
+            endtime=time.time()+(currentquest['time'])
         else:
             print('Marathon challenge, '+ str(len(questjson)-1) + ' sub-challenges long.')
         print('')
@@ -240,7 +259,13 @@ for x in questjson:
         else:
             questdesc=questdesc.replace('xbx',str(currentquest['hand']) + 's')
     print(questdesc)
-    waittime=15
+    if currentquest['objective'] in ["QuestCompleted","DiamondDepth","DiamondTreasure"]: #check for unimplemented sub challenges
+        print('oops this one isnt actually implemented yet teehee')
+        mscores.append(0)
+        umscores.append(0)
+        continue
+    waittime=10
+    endtime+=10
     while waittime>0:
         print('You have ' + str(waittime) + ' seconds to get to the gamemode')
         time.sleep(1)
