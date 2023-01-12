@@ -87,6 +87,8 @@ def resetwidgets():
     timlbl.grid_forget()
     conlbl.grid_forget()
     tmblbl.grid_forget()
+    scext.grid_forget()
+    extlbl.grid_forget()
     timebon.set("0")
     scobjective.set("Cascade")
     scflag.set("")
@@ -125,7 +127,7 @@ def updatesc(n):
             timebonusenable()
         if loadset['objective'] in ['Avalanche','Butterflies','ButterClear','ButterCombo','TimeBomb','MatchBomb']:
             scext.delete(0,len(scext.get()))
-            sctime.insert(0,(str(int(loadset['qextra']))))
+            scext.insert(0,(str(int(loadset['qextra']))))
         updatedesctext()
     else:
         resetwidgets()
