@@ -1,0 +1,35 @@
+{
+  "challengeinfo": {
+    "name": "Challenge B (Medium)",
+    "author": "redstone59",
+    "description": "Medium difficulty challenge included with BJ3WC.",
+    "type": "timed",
+    "time": 300
+  },
+  "quest1": {
+    "objective": "TimeBomb",
+    "flag": "value",
+    "condition": 10,
+    "timebonus": 1,
+    "time": "45",
+    "qextra": 30,
+    "multiplier": 1
+  },
+  "quest2": {
+    "objective": "IceCombo",
+    "flag": "value",
+    "condition": 8,
+    "multiplier": 5
+  },
+  "quest3": {
+    "objective": "Balance",
+    "flag": "value",
+    "condition": 60,
+    "multiplier": 10
+  },
+  "quest4": {
+    "objective": "Lightning",
+    "flag": "endless",
+    "multiplier": 20
+  }
+}

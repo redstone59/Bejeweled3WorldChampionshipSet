@@ -1,0 +1,35 @@
+{
+  "challengeinfo": {
+    "name": "Challenge A (Easy)",
+    "author": "redstone59",
+    "description": "Easy challenge included with BJ3WC.",
+    "type": "timed",
+    "time": 300
+  },
+  "quest1": {
+    "objective": "Avalanche",
+    "flag": "value",
+    "condition": 80,
+    "qextra": 6,
+    "multiplier": 1
+  },
+  "quest2": {
+    "objective": "WallBlast",
+    "flag": "value",
+    "condition": 16,
+    "timebonus": 1,
+    "time": "60",
+    "multiplier": 3
+  },
+  "quest3": {
+    "objective": "PokerLimit",
+    "flag": "value",
+    "condition": 5,
+    "multiplier": 5
+  },
+  "quest4": {
+    "objective": "Classic",
+    "flag": "endless",
+    "multiplier": 10
+  }
+}

@@ -3,7 +3,6 @@ import json
 import psutil #install
 from tkinter import filedialog
 import os,sys
-from pydbg import *
 import time
 
 p = os.path.dirname(os.path.abspath(sys.argv[0])) #default path is the path the file is in (./)
@@ -20,6 +19,18 @@ def openchal():
     except:
         print('Invalid json file')
         openchal()
+    print(questjson['challengeinfo']['name'] + " by " + questjson['challengeinfo']['author'] + ".")
+    print(questjson['challengeinfo']['description'])
+    if questjson['challengeinfo']['type']=='timed':
+        print(str(questjson['challengeinfo']['time']) + 's timed challenge, ' + str(len(questjson)-1) + ' sub-challenges long.')
+    else:
+        print('Marathon challenge, '+ str(len(questjson)-1) + ' sub-challenges long.')
+        print('')
+    if input('Type "y" to play this challenge, type "n" to choose another. ').lower() in ['y','yes','yeah','sure','ok']:
+        return
+    else:
+        openchal()
+    
 
 def findProcessIdByName(processName): #stolen straight from thisPointer's site, thanks!
     '''
@@ -87,7 +98,7 @@ def checksubchal():
     #gem-based quests
     if currentquest['objective'] in ["Avalanche"]: #still need to find GemGoal
         if currentquest['flag'] == 'value':
-            game.write(game.read(addr+0xBE0)+0xE00,goals[str(game.read(addr+0xBE0)+0x322C)]-currentquest['condition'])
+            game.write(game.read(addr+0xBE0)+0xE00,goals[str(game.read(game.read(addr+0xBE0)+0x322C))]-currentquest['condition'])
         else:
             game.write(game.read(addr+0xBE0)+0xE00,-10000)
     #bomb quests
@@ -159,7 +170,7 @@ def checksubchal():
                     iscomplete=1
                     break
     if currentquest['flag']=='timed':
-        scendtime=time.time()+currentquest['time']
+        scendtime=time.time()+int(currentquest['time'])
         while time.time() <= scendtime:
             if hasScoreDecreased() or isTimeUp():
                     iscomplete=1
@@ -204,72 +215,83 @@ def subchallenge(id):
     mscores.append(int(score)*int(currentquest['multiplier']))
     umscores.append(int(score))
 
-checkGameOpen()
-openchal()
-offset=json.load(open(p + '\\jsons\\offsets.json'))
-strs=json.load(open(p + '\\jsons\\strings.json'))
-aflags=json.load(open(p + '\\jsons\\allowedflags.json'))
-mode=json.load(open(p + '\\jsons\\mode.json'))
-mqids=json.load(open(p + '\\jsons\\miniquestids.json'))
-goals=json.load(open(p + '\\jsons\\goals.json'))
-i=0
-mscores=[]
-umscores=[]
-endtime=0
-for x in questjson:
-    currentquest=questjson[x]
-    if time.time() >= endtime and endtime != 0: #check if time is up
-        print("TIME!")
-        break
-    if x=='challengeinfo': #print challenge metadata
-        print(currentquest['name'] + " by " + currentquest['author'] + ".")
-        print(currentquest['description'])
-        if currentquest['type']=='timed':
-            print(str(currentquest['time']) + 's timed challenge, ' + str(len(questjson)-1) + ' sub-challenges long.')
-            endtime=time.time()+(currentquest['time'])
+replay=True
+print("Bejeweled 3 World Championships alpha v0.1. Created by redstone59")
+print("Contribute to the project at https://github.com/redstone59/Bejeweled3WorldChampionshipSet")
+print("")
+
+while replay==True:
+    checkGameOpen()
+    openchal()
+    offset=json.load(open(p + '\\jsons\\offsets.json'))
+    strs=json.load(open(p + '\\jsons\\strings.json'))
+    aflags=json.load(open(p + '\\jsons\\allowedflags.json'))
+    mode=json.load(open(p + '\\jsons\\mode.json'))
+    mqids=json.load(open(p + '\\jsons\\miniquestids.json'))
+    goals=json.load(open(p + '\\jsons\\goals.json'))
+    i=0
+    mscores=[]
+    umscores=[]
+    endtime=0
+    for x in questjson:
+        currentquest=questjson[x]
+        if time.time() >= endtime and endtime != 0: #check if time is up
+            print("TIME!")
+            break
+        if x=='challengeinfo': #print challenge metadata
+            print(currentquest['name'] + " by " + currentquest['author'] + ".")
+            print(currentquest['description'])
+            if currentquest['type']=='timed':
+                print(str(currentquest['time']) + 's timed challenge, ' + str(len(questjson)-1) + ' sub-challenges long.')
+                endtime=time.time()+(currentquest['time'])
+            else:
+                print('Marathon challenge, '+ str(len(questjson)-1) + ' sub-challenges long.')
+            print('')
+            i+=1
+            continue
+        if aflags[currentquest['objective']].count(currentquest['flag']) == 0:
+            print("Invalid flag for objective " + currentquest['objective'] + ". Valid flags are " + str(aflags[currentquest['objective']]).replace("'","")[1:][:-1])
+            print("Skipping to next quest")
+            continue
+        timesuffix=''
+        if currentquest['flag']=='timed':
+            timesuffix=' in ' + str(currentquest['time']) + ' seconds'
+            questdesc=str(strs[currentquest['objective'] + 't'] + timesuffix + "!")
+        elif currentquest['flag']=='endless':
+            timesuffix=' until the challenge ends'
+            questdesc=str(strs[currentquest['objective'] + 't'] + timesuffix + "!")
         else:
-            print('Marathon challenge, '+ str(len(questjson)-1) + ' sub-challenges long.')
-        print('')
+            if currentquest['objective']=='ClasLevel' or currentquest['objective']=='ZenLevel':
+                sccond=str(currentquest['condition']+1)
+            else:
+                sccond=str(currentquest['condition'])
+            try:
+                if currentquest['timebonus']==1:
+                    questdesc=str(strs[currentquest['objective']].replace('zxc',sccond) + " as quickly as possible!")
+            except:
+                questdesc=str(strs[currentquest['objective']].replace('zxc',sccond) + "!")
+        if currentquest['objective']=="PokerHand":
+            if currentquest['flag']=='value' and currentquest['condition']==1:
+                    questdesc=questdesc.replace('xbx',str(currentquest['hand']))
+            else:
+                questdesc=questdesc.replace('xbx',str(currentquest['hand']) + 's')
+        print(questdesc)
+        if currentquest['objective'] in ["QuestCompleted","DiamondDepth","DiamondTreasure"]: #check for unimplemented sub challenges
+            print('oops this one isnt actually implemented yet teehee')
+            mscores.append(0)
+            umscores.append(0)
+            continue
+        waittime=10
+        endtime+=10
+        while waittime>0:
+            print('You have ' + str(waittime) + ' seconds to get to the gamemode')
+            time.sleep(1)
+            waittime-=1
+        subchallenge(currentquest['objective'])
         i+=1
-        continue
-    if aflags[currentquest['objective']].count(currentquest['flag']) == 0:
-        print("Invalid flag for objective " + currentquest['objective'] + ". Valid flags are " + str(aflags[currentquest['objective']]).replace("'","")[1:][:-1])
-        print("Skipping to next quest")
-        continue
-    timesuffix=''
-    if currentquest['flag']=='timed':
-        timesuffix=' in ' + str(currentquest['time']) + ' seconds'
-        questdesc=str(strs[currentquest['objective'] + 't'] + timesuffix + "!")
-    elif currentquest['flag']=='endless':
-        timesuffix=' until the challenge ends'
-        questdesc=str(strs[currentquest['objective'] + 't'] + timesuffix + "!")
+    addscores()
+    if input('Type anything to play another challenge, leave blank to quit. ') != "":
+        replay=True
     else:
-        if currentquest['objective']=='ClasLevel' or currentquest['objective']=='ZenLevel':
-            sccond=str(currentquest['condition']+1)
-        else:
-            sccond=str(currentquest['condition'])
-        try:
-            if currentquest['timebonus']==1:
-                questdesc=str(strs[currentquest['objective']].replace('zxc',sccond) + " as quickly as possible!")
-        except:
-            questdesc=str(strs[currentquest['objective']].replace('zxc',sccond) + "!")
-    if currentquest['objective']=="PokerHand":
-        if currentquest['flag']=='value' and currentquest['condition']==1:
-                questdesc=questdesc.replace('xbx',str(currentquest['hand']))
-        else:
-            questdesc=questdesc.replace('xbx',str(currentquest['hand']) + 's')
-    print(questdesc)
-    if currentquest['objective'] in ["QuestCompleted","DiamondDepth","DiamondTreasure"]: #check for unimplemented sub challenges
-        print('oops this one isnt actually implemented yet teehee')
-        mscores.append(0)
-        umscores.append(0)
-        continue
-    waittime=10
-    endtime+=10
-    while waittime>0:
-        print('You have ' + str(waittime) + ' seconds to get to the gamemode')
-        time.sleep(1)
-        waittime-=1
-    subchallenge(currentquest['objective'])
-    i+=1
-addscores()
+        replay=False
+        break

@@ -1,0 +1,42 @@
+{
+  "challengeinfo": {
+    "name": "Challenge C (Hard)",
+    "author": "redstone59",
+    "description": "Hard challenge included with BJ3WC.",
+    "type": "timed",
+    "time": 300
+  },
+  "quest1": {
+    "objective": "ButterClear",
+    "flag": "value",
+    "condition": 50,
+    "qextra": 1,
+    "multiplier": 1
+  },
+  "quest2": {
+    "objective": "ClasLevel",
+    "flag": "value",
+    "condition": 5,
+    "timebonus": 1,
+    "time": "30",
+    "multiplier": 3
+  },
+  "quest3": {
+    "objective": "Stratamax",
+    "flag": "value",
+    "condition": 30,
+    "multiplier": 10
+  },
+  "quest4": {
+    "objective": "Avalanche",
+    "flag": "value",
+    "condition": 120,
+    "qextra": 6,
+    "multiplier": 5
+  },
+  "quest5": {
+    "objective": "IceStorm",
+    "flag": "endless",
+    "multiplier": 10
+  }
+}

@@ -1,0 +1,78 @@
+{
+  "challengeinfo": {
+    "name": "Challenge E (Marathon)",
+    "author": "redstone59",
+    "description": "Non-timed challenge included with BJ3WC.",
+    "type": "marathon"
+  },
+  "quest1": {
+    "objective": "LightTime",
+    "flag": "value",
+    "condition": 45,
+    "multiplier": 1
+  },
+  "quest2": {
+    "objective": "PokerLimit",
+    "flag": "value",
+    "condition": 10,
+    "multiplier": 3
+  },
+  "quest3": {
+    "objective": "MatchBomb",
+    "flag": "value",
+    "condition": 8,
+    "timebonus": 1,
+    "time": "60",
+    "qextra": 15,
+    "multiplier": 5
+  },
+  "quest4": {
+    "objective": "Avalanche",
+    "flag": "timed",
+    "time": 120,
+    "qextra": 5,
+    "multiplier": 10
+  },
+  "quest5": {
+    "objective": "ClasLevel",
+    "flag": "value",
+    "condition": 10,
+    "multiplier": 10
+  },
+  "quest6": {
+    "objective": "Stratamax",
+    "flag": "value",
+    "condition": 50,
+    "multiplier": 10
+  },
+  "quest7": {
+    "objective": "Butterflies",
+    "flag": "value",
+    "condition": 750000,
+    "timebonus": 1,
+    "time": "150",
+    "qextra": 1,
+    "multiplier": 20
+  },
+  "quest8": {
+    "objective": "Balance",
+    "flag": "value",
+    "condition": 100,
+    "timebonus": 1,
+    "time": "90",
+    "multiplier": 25
+  },
+  "quest9": {
+    "objective": "IceStorm",
+    "flag": "timed",
+    "time": 60,
+    "multiplier": 15
+  },
+  "quest10": {
+    "objective": "TimeBomb",
+    "flag": "timed",
+    "time": 90,
+    "qextra": 30,
+    "multiplier": 50
+  }
+}
