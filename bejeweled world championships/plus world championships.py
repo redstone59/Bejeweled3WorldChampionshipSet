@@ -49,6 +49,9 @@ def findProcessIdByName(processName): #stolen straight from thisPointer's site, 
            pass
     return listOfProcessObjects;
 
+def TwosComp32(n): #thank you tim from StackOverflow
+    return n - 0x100000000 if n & 0x80000000 else n
+
 def checkGameOpen():
     pluspidlist = findProcessIdByName('popcapgame1.exe')
     if len(pluspidlist) == 0:
@@ -56,10 +59,9 @@ def checkGameOpen():
         checkGameOpen()
     else:
         print('Bejeweled 3 found!')
-        global game
+        global game,addr
         game=ReadWriteMemory().get_process_by_name('popcapgame1.exe')
         game.open()
-        global addr
         addr = game.read(0x400000+0x00487f34)
 
 
@@ -76,13 +78,15 @@ def addscores():
     print("FINAL SCORE : " + f"{finalscore:,}")
 
 def hasScoreDecreased():
-    global scorelastpass
+    global scorelastpass,score,highestscore,sclastpass
     if game.read(scorepointer) < scorelastpass:
         print('Continuing to the next quest because the score has decreased (reset or game over)')
-        global score
         score=scorelastpass
         return True
+    if game.read(scpointer)+condoffset > sclastpass:
+        highestscore=game.read(scpointer)+condoffset
     scorelastpass=game.read(scorepointer)
+    sclastpass=game.read(scpointer)+condoffset
 
 def isTimeUp():
     if time.time() >= endtime and endtime != 0: #check if time is up
@@ -91,24 +95,20 @@ def isTimeUp():
         return True
 
 def checksubchal():
-    global score
-    global iscomplete
-    iscomplete=0
-    score=0
+    global score,iscomplete,condoffset
+    iscomplete,score,condoffset=0,0,0
     #gem-based quests
-    if currentquest['objective'] in ["Avalanche"]: #still need to find GemGoal
+    if currentquest['objective'] in ["Avalanche","Stratamax"]: #still need to find GemGoal
         if currentquest['flag'] == 'value':
-            game.write(game.read(addr+0xBE0)+0xE00,goals[str(game.read(game.read(addr+0xBE0)+0x322C))]-currentquest['condition'])
+            game.write(game.read(addr+0xBE0)+0xE00,goals[str(game.read(game.read(addr+0xBE0)+0x322C))]-currentquest['condition']) #progression of quest is decided by the difference of the condition and the goal of the current quest
+            condoffset=goals[str(game.read(game.read(addr+0xBE0)+0x322C))]-currentquest['condition']
         else:
-            game.write(game.read(addr+0xBE0)+0xE00,-10000)
+            game.write(game.read(addr+0xBE0)+0xE00,-1000)
     #bomb quests
     if currentquest['objective'] in ["TimeBomb","MatchBomb"]: #still need to find bomb goal (might even be the same as GemGoal)
-        if currentquest['flag'] == 'value':
-            game.write(scpointer,goals-currentquest['condition'])
-        else:
-            game.write(scpointer,-10000)
+        game.write(game.read(addr+0xBE0)+0xE00,-1000)
+        condoffset=-1000
     #gold rush quests
-    #move-based quests
     #time-based quests
     if currentquest['objective'] in ["BuriedTreasure","GoldRush","Sandstorm","WallBlast"]:
         game.write(game.read(addr+0xBE0)+0x3238,1800) #change quest base time to 30 minutes
@@ -117,7 +117,6 @@ def checksubchal():
         if game.read(game.read(addr+0xBE0)+0x323C) >= 1000: #check if miniquest id is not the one of the secret poker mode
             game.write(game.read(addr+0xBE0)+0x3958,100000) #change PokerGoal to an absurdly high number
             game.write(game.read(addr+0xBE0)+0x395C,1000) #change amount of hands remaining
-            print("you're really shooting yourself in the foot here by using the quest version")
     #add extra quest option
     if currentquest['objective'] in ["Avalanche","Butterflies","ButterClear","ButterCombo","MatchBomb","TimeBomb"]:
         if 'qextra' in currentquest.keys():
@@ -151,19 +150,20 @@ def checksubchal():
         if 'timebonus' in currentquest.keys():
             timescore=int(currentquest['time'])*1000
             while iscomplete==0:
-                if game.read(scpointer)>=currentquest['condition']:
+                if TwosComp32(game.read(scpointer))>=currentquest['condition']+condoffset:
                     score=timescore
                     iscomplete=1
                 if timescore>=1:
                     time.sleep(0.001)
                     timescore-=1
                 if isTimeUp():
+                    score=timescore
                     iscomplete=1
                     break
                 game.write(scorepointer,timescore)
         else:
             while iscomplete==0:
-                if game.read(scpointer)>=currentquest['condition']:
+                if TwosComp32(game.read(scpointer))>=currentquest['condition']+condoffset:
                     score=game.read(scorepointer)
                     iscomplete=1
                 if hasScoreDecreased() or isTimeUp():
@@ -185,7 +185,8 @@ def checksubchal():
         score=game.read(scorepointer)
 
 def subchallenge(id):
-    global game
+    global game,scorelastpass,highestscore,scpointer,scorepointer,condoffset
+    del scorelastpass, highestscore, scorepointer, condoffset
     game.open()
     scoffset=offset[id] #find offsets for pointer
     if currentquest['objective'] == 'PokerHand':
@@ -194,11 +195,9 @@ def subchallenge(id):
         print(str(int(scoffset[1])))
         scoffset[1]=str(int(scoffset[1])+(4*handlist.index(currentquest['hand'])))
         scoffset[1]=str(hex(int(scoffset[1])))
-    global scpointer
     scpointer=game.read(addr+int(scoffset[0],base=16))
     for m in range (1,len(scoffset)):
         scpointer=scpointer+int(scoffset[m],base=16)
-    global scorepointer
     if mode[currentquest['objective']] == "Diamond Mine": #or mode[currentquest['objective']] == "Quest":
         scorepointer=game.read(addr+0xBE0)+0xE00
     else:
@@ -207,13 +206,14 @@ def subchallenge(id):
     game.write(game.read(addr+0xBE0)+0xE00,0)
     game.write(scpointer,0)
     print('GO!')
-    global scorelastpass
     scorelastpass=game.read(scorepointer)
+    highestscore=game.read(scorepointer)
     checksubchal()
     #score stuffs
     del scoffset
     mscores.append(int(score)*int(currentquest['multiplier']))
     umscores.append(int(score))
+    game.close()
 
 replay=True
 print("Bejeweled 3 World Championships alpha v0.1. Created by redstone59")
@@ -229,24 +229,16 @@ while replay==True:
     mode=json.load(open(p + '\\jsons\\mode.json'))
     mqids=json.load(open(p + '\\jsons\\miniquestids.json'))
     goals=json.load(open(p + '\\jsons\\goals.json'))
-    i=0
-    mscores=[]
-    umscores=[]
-    endtime=0
+    mscores,umscores=[],[]
+    i,endtime,scorelastpass,highestscore,scpointer,scorepointer,sclastpass,condoffset=0,0,0,0,0,0,0,0
     for x in questjson:
         currentquest=questjson[x]
         if time.time() >= endtime and endtime != 0: #check if time is up
             print("TIME!")
             break
         if x=='challengeinfo': #print challenge metadata
-            print(currentquest['name'] + " by " + currentquest['author'] + ".")
-            print(currentquest['description'])
             if currentquest['type']=='timed':
-                print(str(currentquest['time']) + 's timed challenge, ' + str(len(questjson)-1) + ' sub-challenges long.')
                 endtime=time.time()+(currentquest['time'])
-            else:
-                print('Marathon challenge, '+ str(len(questjson)-1) + ' sub-challenges long.')
-            print('')
             i+=1
             continue
         if aflags[currentquest['objective']].count(currentquest['flag']) == 0:
@@ -294,4 +286,3 @@ while replay==True:
         replay=True
     else:
         replay=False
-        break

@@ -1,1 +1,50 @@
-{"challengeinfo": {"name": "Challenge D (Lunatic)", "author": "redstone59", "description": "Very difficult challenge included with BJ3WC.", "type": "timed", "time": 600}, "quest1": {"objective": "LightMult", "flag": "value", "condition": 8, "multiplier": 1}, "quest2": {"objective": "PokerHand", "flag": "value", "condition": 10, "timebonus": 1, "time": "60", "hand": "Full House", "multiplier": 1}, "quest3": {"objective": "Balance", "flag": "timed", "time": 60, "multiplier": 10}, "quest4": {"objective": "IceStorm", "flag": "value", "condition": 500000, "timebonus": 1, "time": "120", "multiplier": 1}, "quest5": {"objective": "ClasLevel", "flag": "value", "condition": 10, "multiplier": 1}, "quest6": {"objective": "Poker", "flag": "endless", "multiplier": 25}}
+{
+  "challengeinfo": {
+    "name": "Challenge D",
+    "author": "redstone59",
+    "description": "Very difficult challenge included with BJ3WC.",
+    "type": "timed",
+    "time": 600
+  },
+  "quest1": {
+    "objective": "LightMult",
+    "flag": "value",
+    "condition": 8,
+    "multiplier": 1
+  },
+  "quest2": {
+    "objective": "PokerHand",
+    "flag": "value",
+    "condition": 10,
+    "timebonus": 1,
+    "time": "60",
+    "hand": "Full House",
+    "multiplier": 1
+  },
+  "quest3": {
+    "objective": "Balance",
+    "flag": "timed",
+    "time": 60,
+    "multiplier": 10
+  },
+  "quest4": {
+    "objective": "IceStorm",
+    "flag": "value",
+    "condition": 500000,
+    "timebonus": 1,
+    "time": "120",
+    "multiplier": 1
+  },
+  "quest5": {
+    "objective": "MatchBomb",
+    "flag": "value",
+    "condition": 10,
+    "qextra":8,
+    "multiplier": 1
+  },
+  "quest6": {
+    "objective": "Poker",
+    "flag": "endless",
+    "multiplier": 25
+  }
+}

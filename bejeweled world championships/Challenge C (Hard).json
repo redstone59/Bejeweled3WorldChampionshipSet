@@ -1,10 +1,10 @@
 {
   "challengeinfo": {
-    "name": "Challenge C (Hard)",
+    "name": "Challenge C",
     "author": "redstone59",
     "description": "Hard challenge included with BJ3WC.",
     "type": "timed",
-    "time": 300
+    "time": 600
   },
   "quest1": {
     "objective": "ButterClear",
@@ -16,10 +16,10 @@
   "quest2": {
     "objective": "ClasLevel",
     "flag": "value",
-    "condition": 5,
+    "condition": 4,
     "timebonus": 1,
-    "time": "30",
-    "multiplier": 3
+    "time": "60",
+    "multiplier": 8
   },
   "quest3": {
     "objective": "Stratamax",
