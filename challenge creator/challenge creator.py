@@ -79,6 +79,15 @@ def updateflags(n):
     if scobjective.get()=="PokerHand":
         hanlbl.grid(column=2,row=12)
         schand.grid(column=3,row=12,pady=5)
+    if scobjective.get() in ["Avalanche","Butterflies","ButterClear","ButterCombo","TimeBomb","MatchBomb"]:
+        if scobjective.get() =="Avalanche":
+            extlbl['text']='# gems/move'
+        if scobjective.get() in ['Butterflies','ButterClear','ButterCombo']:
+            extlbl['text']='# matches/move'
+        if scobjective.get() in ['TimeBomb','MatchBomb']:
+            extlbl['text']='Start bomb #'
+        extlbl.grid(column=2,row=13)
+        scext.grid(column=3,row=13)
 
 def resetwidgets():
     sccondition.grid_forget()
