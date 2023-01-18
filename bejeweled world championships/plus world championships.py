@@ -4,14 +4,20 @@ import psutil #install
 from tkinter import filedialog
 import os,sys
 import time
+import tkinter as tk
+from tkinter import ttk, messagebox
+from pyglet import font
+import hashlib
+from webbrowser import open as webopen
 
 p = os.path.dirname(os.path.abspath(sys.argv[0])) #default path is the path the file is in (./)
 questjson={}
 
 def openchal():
     filetypes=(('JSON file', '*.json'),('All Files','*.*'))
+    questpath=filedialog.askopenfilename(title="Open the challenge file",initialdir=p,filetypes=filetypes)
     global questjson
-    questjson = json.load(open(filedialog.askopenfilename(title="Open the challenge file",initialdir=p,filetypes=filetypes)))
+    questjson = json.load(open(questpath))
     try:
         if 'challengeinfo' not in questjson.keys():
             print('Invalid json file')
@@ -20,17 +26,20 @@ def openchal():
         print('Invalid json file')
         openchal()
     print(questjson['challengeinfo']['name'] + " by " + questjson['challengeinfo']['author'] + ".")
+    canvas.create_text([(179,35),(233,44),(399,69)][res.get()],text=questjson['challengeinfo']['name'],font=("Flare Gothic",[8,10,14][res.get()]),anchor=tk.CENTER,fill='#ffffff')
+    canvas.create_text([(179,51),(233,64),(399,104)][res.get()],text=questjson['challengeinfo']['author'],font=("Flare Gothic",[8,10,14][res.get()]),anchor=tk.CENTER,fill='#ffffff')
+    canvas.create_text([(121,66),(155,89),(243,133)][res.get()],text=insert_newlines(questjson['challengeinfo']['description'],30),font=("Flare Gothic",[8,10,14][res.get()]),anchor=tk.NW,fill='#ffffff')
     print(questjson['challengeinfo']['description'])
     if questjson['challengeinfo']['type']=='timed':
         print(str(questjson['challengeinfo']['time']) + 's timed challenge, ' + str(len(questjson)-1) + ' sub-challenges long.')
     else:
         print('Marathon challenge, '+ str(len(questjson)-1) + ' sub-challenges long.')
         print('')
-    if input('Type "y" to play this challenge, type "n" to choose another. ').lower() in ['y','yes','yeah','sure','ok']:
-        return
-    else:
-        openchal()
+    print(sha256sum(questpath))
+    return
     
+def insert_newlines(string, every): #thank you gurney alex (https://stackoverflow.com/questions/2657693/insert-a-newline-character-every-64-characters-using-python)
+    return '\n'.join(string[i:i+every] for i in range(0, len(string), every))
 
 def findProcessIdByName(processName): #stolen straight from thisPointer's site, thanks!
     '''
@@ -52,17 +61,29 @@ def findProcessIdByName(processName): #stolen straight from thisPointer's site, 
 def TwosComp32(n): #thank you tim from StackOverflow
     return n - 0x100000000 if n & 0x80000000 else n
 
+def sha256sum(filename): #thank you maxschlepzig for this (https://stackoverflow.com/questions/22058048/hashing-a-file-in-python)
+    h  = hashlib.sha256()
+    b  = bytearray(128*1024)
+    mv = memoryview(b)
+    with open(filename, 'rb', buffering=0) as f:
+        while n := f.readinto(mv):
+            h.update(mv[:n])
+    return h.hexdigest()
+
 def checkGameOpen():
     pluspidlist = findProcessIdByName('popcapgame1.exe')
     if len(pluspidlist) == 0:
-        input("Bejeweled 3 not found, please open the game and hit the Enter key to try again.")
-        checkGameOpen()
+        if messagebox.askyesno("Game not found","Bejeweled 3 not found, hit Yes to try again"):
+            challenge()
+        else:
+            return False
     else:
         print('Bejeweled 3 found!')
         global game,addr
         game=ReadWriteMemory().get_process_by_name('popcapgame1.exe')
         game.open()
         addr = game.read(0x400000+0x00487f34)
+        return True
 
 
 def addscores():
@@ -74,8 +95,11 @@ def addscores():
         subscript=list(questjson)[x]
         currentquest=questjson[subscript]
         print(currentquest['objective'] + ' : ' + f"{umscores[x-1]:,}" + ' * ' + f"{currentquest['multiplier']:,}" + ' = ' + f"{mscores[x-1]:,}")
+        canvas.create_text([(262,130*(x-1)),(336,167+46*(x-1)),(526,261+72*(x-1))][res.get()],text='x' + f"{currentquest['multiplier']:,}",font=("Flare Gothic",[12,15,24][res.get()]),anchor=tk.SE,fill='#ffff60')
+        canvas.create_text([(262,148*(x-1)),(336,190+46*(x-1)),(526,297+72*(x-1))][res.get()],text=f"{mscores[x-1]:,}",font=("Flare Gothic",[12,15,24][res.get()]),anchor=tk.SE,fill='#ffff60')
         finalscore=finalscore + mscores[x-1]
     print("FINAL SCORE : " + f"{finalscore:,}")
+    canvas.create_text([(150,570),(196,733),(300,1120)][res.get()],text=f"{finalscore:,}",font=("Myriad Pro",[24,36,48][res.get()]),anchor=tk.CENTER,fill='#ffffff')
 
 def hasScoreDecreased():
     global scorelastpass,score,highestscore,sclastpass
@@ -98,7 +122,7 @@ def checksubchal():
     global score,iscomplete,condoffset
     iscomplete,score,condoffset=0,0,0
     #gem-based quests
-    if currentquest['objective'] in ["Avalanche","Stratamax"]: #still need to find GemGoal
+    if currentquest['objective'] in ["Avalanche"]: #still need to find GemGoal
         if currentquest['flag'] == 'value':
             game.write(game.read(addr+0xBE0)+0xE00,goals[str(game.read(game.read(addr+0xBE0)+0x322C))]-currentquest['condition']) #progression of quest is decided by the difference of the condition and the goal of the current quest
             condoffset=goals[str(game.read(game.read(addr+0xBE0)+0x322C))]-currentquest['condition']
@@ -141,25 +165,23 @@ def checksubchal():
         movepointer=game.read(addr+0xBE0)+0x323C #pointer to move counter
         game.write(movepointer,currentquest['condition'])
         game.write(movepointer-4,currentquest['condition'])
+        game.write(game.read(addr+0xBE0)+0xE00,-1000)
         while iscomplete==0:
             if game.read(movepointer)<=0:
-                score=game.read(scpointer)
+                score=TwosComp32(game.read(scpointer))+1000
                 iscomplete=1
                 return
     if currentquest['flag']=='value':
         if 'timebonus' in currentquest.keys():
             timescore=int(currentquest['time'])*1000
             while iscomplete==0:
-                if TwosComp32(game.read(scpointer))>=currentquest['condition']+condoffset:
+                if TwosComp32(game.read(scpointer))>=currentquest['condition']+condoffset or isTimeUp():
                     score=timescore
                     iscomplete=1
                 if timescore>=1:
                     time.sleep(0.001)
                     timescore-=1
-                if isTimeUp():
-                    score=timescore
-                    iscomplete=1
-                    break
+                gui.update()
                 game.write(scorepointer,timescore)
         else:
             while iscomplete==0:
@@ -169,12 +191,14 @@ def checksubchal():
                 if hasScoreDecreased() or isTimeUp():
                     iscomplete=1
                     break
+                gui.update()
     if currentquest['flag']=='timed':
         scendtime=time.time()+int(currentquest['time'])
         while time.time() <= scendtime:
             if hasScoreDecreased() or isTimeUp():
                     iscomplete=1
                     break
+            gui.update()
         score=game.read(scorepointer)
         iscomplete=1
     elif currentquest['flag']=='endless':
@@ -182,6 +206,7 @@ def checksubchal():
             if hasScoreDecreased() or isTimeUp():
                     iscomplete=1
                     break
+            gui.update()
         score=game.read(scorepointer)
 
 def subchallenge(id):
@@ -213,76 +238,194 @@ def subchallenge(id):
     del scoffset
     mscores.append(int(score)*int(currentquest['multiplier']))
     umscores.append(int(score))
+    canvas.create_text([(38,148*(i-1)),(49,190+46*(i-1)),(76,297+72*(i-1))][res.get()],text=f'{int(score):,}',font=("Flare Gothic",[12,15,24][res.get()]),anchor=tk.SW,fill='#f4f4d0')
     game.close()
 
-replay=True
-print("Bejeweled 3 World Championships alpha v0.1. Created by redstone59")
-print("Contribute to the project at https://github.com/redstone59/Bejeweled3WorldChampionshipSet")
-print("")
-
-while replay==True:
-    checkGameOpen()
-    openchal()
-    offset=json.load(open(p + '\\jsons\\offsets.json'))
-    strs=json.load(open(p + '\\jsons\\strings.json'))
-    aflags=json.load(open(p + '\\jsons\\allowedflags.json'))
-    mode=json.load(open(p + '\\jsons\\mode.json'))
-    mqids=json.load(open(p + '\\jsons\\miniquestids.json'))
-    goals=json.load(open(p + '\\jsons\\goals.json'))
-    mscores,umscores=[],[]
-    i,endtime,scorelastpass,highestscore,scpointer,scorepointer,sclastpass,condoffset=0,0,0,0,0,0,0,0
-    for x in questjson:
-        currentquest=questjson[x]
-        if time.time() >= endtime and endtime != 0: #check if time is up
-            print("TIME!")
-            break
-        if x=='challengeinfo': #print challenge metadata
-            if currentquest['type']=='timed':
-                endtime=time.time()+(currentquest['time'])
+def challenge():
+    changeRes()
+    if checkGameOpen():
+        openchal()
+        sm_file.entryconfig("Resolution",state='disabled')
+        sm_file.entryconfig("Open",state='disabled')
+        sm_chal.entryconfig("Abort",state='active')
+        sm_chal.entryconfig("Open",state='disabled')
+        global offset,strs,aflags,mode,mqids,goals,mscores,umscores,i,endtime,scorelastpass,highestscore,scpointer,scorepointer,sclastpass,condoffset,currentquest,isAborted,inChallenge
+        offset=json.load(open(p + '\\jsons\\offsets.json'))
+        strs=json.load(open(p + '\\jsons\\strings.json'))
+        aflags=json.load(open(p + '\\jsons\\allowedflags.json'))
+        mode=json.load(open(p + '\\jsons\\mode.json'))
+        mqids=json.load(open(p + '\\jsons\\miniquestids.json'))
+        goals=json.load(open(p + '\\jsons\\goals.json'))
+        guistrings=json.load(open(p + '\\jsons\\guistrings.json'))
+        mscores,umscores=[],[]
+        i,endtime,scorelastpass,highestscore,scpointer,scorepointer,sclastpass,condoffset=0,0,0,0,0,0,0,0
+        inChallenge=True
+        isAborted=False
+        for x in questjson:
+            currentquest=questjson[x]
+            if isAborted == True:
+                break
+            if time.time() >= endtime and endtime != 0: #check if time is up
+                print("TIME!")
+                break
+            if x=='challengeinfo': #print challenge metadata
+                if currentquest['type']=='timed':
+                    endtime=time.time()+(currentquest['time'])
+                i+=1
+                continue
+            if aflags[currentquest['objective']].count(currentquest['flag']) == 0:
+                print("Invalid flag for objective " + currentquest['objective'] + ". Valid flags are " + str(aflags[currentquest['objective']]).replace("'","")[1:][:-1])
+                print("Skipping to next quest")
+                continue
+            timesuffix=''
+            guistring=[]
+            guistring.insert(0,guistrings[currentquest['objective']][0])
+            if currentquest['flag']=='timed':
+                timesuffix=' in ' + str(currentquest['time']) + ' seconds'
+                questdesc=str(strs[currentquest['objective'] + 't'] + timesuffix + "!")
+                guistring.insert(1,guistrings[currentquest['objective'] + 't'][1])
+                guistring.insert(2,'('+str(currentquest['time'])+'s)')
+            elif currentquest['flag']=='endless':
+                timesuffix=' until the challenge ends'
+                questdesc=str(strs[currentquest['objective'] + 't'] + timesuffix + "!")
+                guistring.insert(1,guistrings[currentquest['objective']+ 't'][1])
+                guistring.insert(2,'(Endless)')
+            else:
+                if currentquest['objective']=='ClasLevel' or currentquest['objective']=='ZenLevel':
+                    sccond=str(currentquest['condition']+1)
+                else:
+                    sccond=str(currentquest['condition'])
+                try:
+                    if currentquest['timebonus']==1:
+                        questdesc=str(strs[currentquest['objective']].replace('zxc',sccond) + " as quickly as possible!")
+                        guistring.insert(1,guistrings[currentquest['objective']][1].replace('zxc',sccond))
+                        guistring.insert(2,'('+str(currentquest['time'])+'s)')
+                except:
+                    questdesc=str(strs[currentquest['objective']].replace('zxc',sccond) + "!")
+                    guistring.insert(1,guistrings[currentquest['objective']][1].replace('zxc',sccond))
+            if currentquest['objective']=="PokerHand":
+                if currentquest['flag']=='value' and currentquest['condition']==1:
+                        questdesc=questdesc.replace('xbx',str(currentquest['hand']))
+                        guistring[1]=guistring[1].replace('xbx',str(currentquest['hand']))
+                else:
+                    questdesc=questdesc.replace('xbx',str(currentquest['hand']) + 's')
+                    guistring[1]=guistring[1].replace('xbx',str(currentquest['hand']) + 's')
+            print(questdesc)
+            if 'qextra' in currentquest.keys():
+                guistring.append('[' + str(currentquest['qextra']) + ']')
+            canvas.create_text([(38,130*(i-1)),(49,167+46*(i-1)),(76,261+72*(i-1))][res.get()],text=''.join(guistring),font=("Flare Gothic",[12,15,24][res.get()]),anchor=tk.SW,fill='#f4f4d0')
+            if currentquest['objective'] in ["QuestCompleted","DiamondDepth","DiamondTreasure"]: #check for unimplemented sub challenges
+                print('oops this one isnt actually implemented yet teehee')
+                mscores.append(0)
+                umscores.append(0)
+                continue
+            waittime=10
+            endtime+=waittime
+            gracetime=time.time()+waittime
+            while time.time() < gracetime and isAborted == False:
+                gui.update()
+            if isAborted == True:
+                break
+            subchallenge(currentquest['objective'])
             i+=1
-            continue
-        if aflags[currentquest['objective']].count(currentquest['flag']) == 0:
-            print("Invalid flag for objective " + currentquest['objective'] + ". Valid flags are " + str(aflags[currentquest['objective']]).replace("'","")[1:][:-1])
-            print("Skipping to next quest")
-            continue
-        timesuffix=''
-        if currentquest['flag']=='timed':
-            timesuffix=' in ' + str(currentquest['time']) + ' seconds'
-            questdesc=str(strs[currentquest['objective'] + 't'] + timesuffix + "!")
-        elif currentquest['flag']=='endless':
-            timesuffix=' until the challenge ends'
-            questdesc=str(strs[currentquest['objective'] + 't'] + timesuffix + "!")
+        addscores()
+        inChallenge=False
+        sm_file.entryconfig("Resolution",state='active')
+        sm_file.entryconfig("Open",state='active')
+        sm_chal.entryconfig("Abort",state='disabled')
+        sm_chal.entryconfig("Open",state='active')
+        
+isAborted=False
+inChallenge=False
+
+def abort():
+    global isAborted,iscomplete
+    isAborted=True
+    iscomplete=1
+
+# tkinter related functions
+
+def changeRes():
+    global bgimg,canvas
+    reslist=['300x620','384x788','600x1220']
+    bglist=['normalbg.png','highbg.png','ultrabg.png']
+    gui.geometry(reslist[res.get()])
+    bgimg = tk.PhotoImage(file=p + '\\images\\' + bglist[res.get()])
+    if res.get()==0:
+        canvas = tk.Canvas(gui, width=300, height=600, bg='white')
+        canvas.place(x=0,y=20)
+        bg=canvas.create_image((148,300),image=bgimg)
+        canvas.tag_lower(bg)
+    elif res.get()==1:
+        canvas = tk.Canvas(gui, width=384, height=768, bg='white')
+        canvas.place(x=0,y=20)
+        bg=canvas.create_image((190,384),image=bgimg)
+        canvas.tag_lower(bg)
+    elif res.get()==2:
+        canvas = tk.Canvas(gui, width=600, height=1200, bg='white')
+        canvas.place(x=0,y=20)
+        bg=canvas.create_image((298,600),image=bgimg)
+        canvas.tag_lower(bg)
+    
+def checkchallenge():
+    global isAborted
+    if inChallenge == True:
+        if messagebox.askyesno('Challenge in progress','Are you sure you want to leave mid-challenge?'):
+            isAborted=True
+            gui.destroy()
+            quit()
         else:
-            if currentquest['objective']=='ClasLevel' or currentquest['objective']=='ZenLevel':
-                sccond=str(currentquest['condition']+1)
-            else:
-                sccond=str(currentquest['condition'])
-            try:
-                if currentquest['timebonus']==1:
-                    questdesc=str(strs[currentquest['objective']].replace('zxc',sccond) + " as quickly as possible!")
-            except:
-                questdesc=str(strs[currentquest['objective']].replace('zxc',sccond) + "!")
-        if currentquest['objective']=="PokerHand":
-            if currentquest['flag']=='value' and currentquest['condition']==1:
-                    questdesc=questdesc.replace('xbx',str(currentquest['hand']))
-            else:
-                questdesc=questdesc.replace('xbx',str(currentquest['hand']) + 's')
-        print(questdesc)
-        if currentquest['objective'] in ["QuestCompleted","DiamondDepth","DiamondTreasure"]: #check for unimplemented sub challenges
-            print('oops this one isnt actually implemented yet teehee')
-            mscores.append(0)
-            umscores.append(0)
-            continue
-        waittime=10
-        endtime+=10
-        while waittime>0:
-            print('You have ' + str(waittime) + ' seconds to get to the gamemode')
-            time.sleep(1)
-            waittime-=1
-        subchallenge(currentquest['objective'])
-        i+=1
-    addscores()
-    if input('Type anything to play another challenge, leave blank to quit. ') != "":
-        replay=True
-    else:
-        replay=False
+            return
+    else: 
+        gui.destroy()
+        quit()
+
+# tkinter GUI stuffs now
+
+gui=tk.Tk()
+gui.iconbitmap(p + '\\g em.ico')
+gui.protocol('WM_DELETE_WINDOW',checkchallenge)
+gui.geometry('300x620')
+gui.title('Bejeweled 3 World Championships alpha v0.2')
+gui.resizable(False,False)
+
+# tk variables
+res=tk.IntVar()
+res.set(0)
+font.add_file(p + "\\fonts\\Flare Gothic Regular.ttf")
+font.add_file(p + "\\fonts\\Myriad Pro Regular.ttf")
+
+#menu bar stuffs
+sm_file_button=ttk.Menubutton(gui,text='File')
+sm_file=tk.Menu(sm_file_button,tearoff=False)
+sm_file.add_command(label='Open',underline=0,command=challenge)
+ssm_reso=tk.Menu(sm_file,tearoff=False)
+ssm_reso.add_radiobutton(label='Normal (300x600)',value=0,variable=res,command=changeRes)
+ssm_reso.add_radiobutton(label='High (384x768)',value=1,variable=res,command=changeRes)
+ssm_reso.add_radiobutton(label='Ultra (600x1200)',value=2,variable=res,command=changeRes)
+sm_file.add_cascade(label='Resolution',menu=ssm_reso)
+sm_file.add_command(label='Exit',underline=0,command=checkchallenge)
+sm_file_button['menu']=sm_file
+sm_chal_button=ttk.Menubutton(gui,text='Challenge')
+sm_chal=tk.Menu(sm_chal_button,tearoff=False)
+sm_chal.add_command(label='Open',underline=0,command=challenge)
+#ssm_pause=sm_chal.add_checkbutton(label='Pause',underline=0,state='disabled')
+ssm_abort=sm_chal.add_command(label='Abort',underline=0,state='disabled',command=abort)
+sm_chal_button['menu']=sm_chal
+sm_about_button=ttk.Menubutton(gui,text='About')
+sm_about=tk.Menu(sm_about_button,tearoff=False)
+sm_about.add_command(label='About',underline=0)
+sm_about.add_command(label='Readme file',underline=0)
+sm_about.add_command(label='GitHub page',underline=0,command=lambda: webopen('https://github.com/redstone59/Bejeweled3WorldChampionshipSet'))
+sm_about_button['menu']=sm_about
+sm_file_button.place(x=0,y=0)
+sm_chal_button.place(x=60,y=0)
+sm_about_button.place(x=150,y=0)
+
+bgimg = tk.PhotoImage(file=p + '\\images\\normalbg.png')
+
+canvas = tk.Canvas(gui, width=300, height=600, bg='white')
+canvas.place(x=0,y=20)
+canvas.create_image((148,300),image=bgimg)
+
+gui.mainloop()
