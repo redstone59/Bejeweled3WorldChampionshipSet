@@ -1,5 +1,5 @@
 {
-    "Cascade":["value","timed"],
+    "Cascade":["value"],
     "Classic":["value","timed","endless"],
     "Zen":["value","timed","endless"],
     "Lightning":["value","timed","endless"],
@@ -21,16 +21,15 @@
     "IceCombo":["value","timed"],
     "DiamondDepth":["value","timed","endless"],
     "DiamondTreasure":["value","timed"],
-    "DiamondTime":["value","timed"],
     "Balance":["value","timed","endless"],
     "Stratamax":["value"],
     "GoldRush":["value"],
     "Alchemy":["value","timed"],
-    "TimeBomb":["value","timed"],
-    "MatchBomb":["value","timed"],
+    "TimeBomb":["value","timed","endless"],
+    "MatchBomb":["value","timed","endless"],
     "Avalanche":["value","timed","endless"],
     "WallBlast":["value","timed"],
     "Treasure":["value"],
     "Sand":["value"],
-    "Blaster":["value","timed"]
+    "Blaster":["value"]
 }
