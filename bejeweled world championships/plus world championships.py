@@ -27,8 +27,8 @@ def openchal():
         openchal()
     print(questjson['challengeinfo']['name'] + " by " + questjson['challengeinfo']['author'] + ".")
     canvas.create_text([(179,35),(233,44),(399,69)][res.get()],text=questjson['challengeinfo']['name'],font=("Flare Gothic",[8,10,14][res.get()]),anchor=tk.CENTER,fill='#ffffff')
-    canvas.create_text([(179,51),(233,64),(399,104)][res.get()],text=questjson['challengeinfo']['author'],font=("Flare Gothic",[8,10,14][res.get()]),anchor=tk.CENTER,fill='#ffffff')
-    canvas.create_text([(121,66),(155,89),(243,133)][res.get()],text=insert_newlines(questjson['challengeinfo']['description'],30),font=("Flare Gothic",[8,10,14][res.get()]),anchor=tk.NW,fill='#ffffff')
+    canvas.create_text([(179,51),(233,67),(399,104)][res.get()],text=questjson['challengeinfo']['author'],font=("Flare Gothic",[8,10,14][res.get()]),anchor=tk.CENTER,fill='#ffffff')
+    canvas.create_text([(121,66),(155,85),(243,133)][res.get()],text=insert_newlines(questjson['challengeinfo']['description'],30),font=("Flare Gothic",[8,10,14][res.get()]),anchor=tk.NW,fill='#ffffff')
     print(questjson['challengeinfo']['description'])
     if questjson['challengeinfo']['type']=='timed':
         print(str(questjson['challengeinfo']['time']) + 's timed challenge, ' + str(len(questjson)-1) + ' sub-challenges long.')
@@ -36,10 +36,11 @@ def openchal():
         print('Marathon challenge, '+ str(len(questjson)-1) + ' sub-challenges long.')
         print('')
     print(sha256sum(questpath))
+    canvas.create_text([(150,470),(196,601),(300,940)][res.get()],text='Challenge hash:\n' + sha256sum(questpath),font=("Flare Gothic",[5,7,10][res.get()]),anchor=tk.CENTER,fill='#ffffff')
     return
-    
+
 def insert_newlines(string, every): #thank you gurney alex (https://stackoverflow.com/questions/2657693/insert-a-newline-character-every-64-characters-using-python)
-    return '\n'.join(string[i:i+every] for i in range(0, len(string), every))
+    return '-\n'.join(string[i:i+every] for i in range(0, len(string), every))
 
 def findProcessIdByName(processName): #stolen straight from thisPointer's site, thanks!
     '''
@@ -58,7 +59,7 @@ def findProcessIdByName(processName): #stolen straight from thisPointer's site, 
            pass
     return listOfProcessObjects;
 
-def TwosComp32(n): #thank you tim from StackOverflow
+def TwosComp32(n): #thank you tim from StackOverflow (why am i an idiot and forgot the link to this one)
     return n - 0x100000000 if n & 0x80000000 else n
 
 def sha256sum(filename): #thank you maxschlepzig for this (https://stackoverflow.com/questions/22058048/hashing-a-file-in-python)
@@ -99,13 +100,15 @@ def addscores():
         canvas.create_text([(262,148*(x-1)),(336,190+46*(x-1)),(526,297+72*(x-1))][res.get()],text=f"{mscores[x-1]:,}",font=("Flare Gothic",[12,15,24][res.get()]),anchor=tk.SE,fill='#ffff60')
         finalscore=finalscore + mscores[x-1]
     print("FINAL SCORE : " + f"{finalscore:,}")
-    canvas.create_text([(150,570),(196,733),(300,1120)][res.get()],text=f"{finalscore:,}",font=("Myriad Pro",[24,36,48][res.get()]),anchor=tk.CENTER,fill='#ffffff')
+    canvas.create_text([(150,552),(196,707),(300,1105)][res.get()],text=f"{finalscore:,}",font=("Myriad Pro",[24,36,48][res.get()]),anchor=tk.CENTER,fill='#ffffff')
+    if timeshow.get()==1 and questjson['challengeinfo']['type']=='timed': canvas.create_text([(150,592),(196,758),(300,1185)][res.get()],text='Timer is shown.',font=("Flare Gothic",[8,10,16][res.get()]),anchor=tk.CENTER,fill='#ffffff')
 
 def hasScoreDecreased():
-    global scorelastpass,score,highestscore,sclastpass
+    global scorelastpass,score,highestscore,sclastpass,subchalfailed
     if game.read(scorepointer) < scorelastpass:
         print('Continuing to the next quest because the score has decreased (reset or game over)')
         score=scorelastpass
+        subchalfailed=' (incomplete)'
         return True
     if game.read(scpointer)+condoffset > sclastpass:
         highestscore=game.read(scpointer)+condoffset
@@ -113,10 +116,15 @@ def hasScoreDecreased():
     sclastpass=game.read(scpointer)+condoffset
 
 def isTimeUp():
-    if time.time() >= endtime and endtime != 0: #check if time is up
+    if time.time() >= endtime and endtime != 0 and questjson['challengeinfo']['type'] == 'timed': #check if time is up
         global score
         score=scorepointer
         return True
+    if questjson['challengeinfo']['type'] == 'timed' and timeshow.get() == 1:
+        if divmod(int(endtime - time.time()),60)[1] >= 10: timerlbl['text']=str(divmod(int(endtime - time.time()),60)[0])+':'+str(divmod(int(endtime - time.time()),60)[1])
+        else: timerlbl['text']=str(divmod(int(endtime - time.time()),60)[0])+':0'+str(divmod(int(endtime - time.time()),60)[1])
+    elif questjson['challengeinfo']['type'] != 'timed' and timeshow.get() == 1:
+        timerlbl['text']='Marathon'
 
 def checksubchal():
     global score,iscomplete,condoffset
@@ -183,6 +191,7 @@ def checksubchal():
                     timescore-=1
                 gui.update()
                 game.write(scorepointer,timescore)
+
         else:
             while iscomplete==0:
                 if TwosComp32(game.read(scpointer))>=currentquest['condition']+condoffset:
@@ -210,8 +219,9 @@ def checksubchal():
         score=game.read(scorepointer)
 
 def subchallenge(id):
-    global game,scorelastpass,highestscore,scpointer,scorepointer,condoffset
-    del scorelastpass, highestscore, scorepointer, condoffset
+    global game,scorelastpass,highestscore,scpointer,scorepointer,condoffset,subchalfailed
+    del scorelastpass, highestscore, scorepointer, condoffset, subchalfailed
+    subchalfailed=''
     game.open()
     scoffset=offset[id] #find offsets for pointer
     if currentquest['objective'] == 'PokerHand':
@@ -238,7 +248,7 @@ def subchallenge(id):
     del scoffset
     mscores.append(int(score)*int(currentquest['multiplier']))
     umscores.append(int(score))
-    canvas.create_text([(38,148*(i-1)),(49,190+46*(i-1)),(76,297+72*(i-1))][res.get()],text=f'{int(score):,}',font=("Flare Gothic",[12,15,24][res.get()]),anchor=tk.SW,fill='#f4f4d0')
+    canvas.create_text([(38,148*(i-1)),(49,190+46*(i-1)),(76,297+72*(i-1))][res.get()],text=f'{int(score):,}' + subchalfailed,font=("Flare Gothic",[12,15,24][res.get()]),anchor=tk.SW,fill='#f4f4d0')
     game.close()
 
 def challenge():
@@ -249,7 +259,8 @@ def challenge():
         sm_file.entryconfig("Open",state='disabled')
         sm_chal.entryconfig("Abort",state='active')
         sm_chal.entryconfig("Open",state='disabled')
-        global offset,strs,aflags,mode,mqids,goals,mscores,umscores,i,endtime,scorelastpass,highestscore,scpointer,scorepointer,sclastpass,condoffset,currentquest,isAborted,inChallenge
+        sm_chal.entryconfig("Show time left",state='disabled')
+        global offset,strs,aflags,mode,mqids,goals,mscores,umscores,i,endtime,scorelastpass,highestscore,scpointer,scorepointer,sclastpass,condoffset,currentquest,isAborted,inChallenge,subchalfailed
         offset=json.load(open(p + '\\jsons\\offsets.json'))
         strs=json.load(open(p + '\\jsons\\strings.json'))
         aflags=json.load(open(p + '\\jsons\\allowedflags.json'))
@@ -258,19 +269,20 @@ def challenge():
         goals=json.load(open(p + '\\jsons\\goals.json'))
         guistrings=json.load(open(p + '\\jsons\\guistrings.json'))
         mscores,umscores=[],[]
-        i,endtime,scorelastpass,highestscore,scpointer,scorepointer,sclastpass,condoffset=0,0,0,0,0,0,0,0
+        i,endtime,scorelastpass,highestscore,scpointer,scorepointer,sclastpass,condoffset,subchalfailed=0,0,0,0,0,0,0,0,''
         inChallenge=True
         isAborted=False
         for x in questjson:
             currentquest=questjson[x]
+            canvas.delete('desc')
             if isAborted == True:
                 break
-            if time.time() >= endtime and endtime != 0: #check if time is up
+            if time.time() >= endtime and endtime != 0 and questjson['challengeinfo']['flag'] == 'timed': #check if time is up
                 print("TIME!")
                 break
             if x=='challengeinfo': #print challenge metadata
-                if currentquest['type']=='timed':
-                    endtime=time.time()+(currentquest['time'])
+                if currentquest['type']=='timed': endtime=time.time()+(currentquest['time'])
+                else: endtime=time.time()+315576000
                 i+=1
                 continue
             if aflags[currentquest['objective']].count(currentquest['flag']) == 0:
@@ -310,7 +322,7 @@ def challenge():
                 else:
                     questdesc=questdesc.replace('xbx',str(currentquest['hand']) + 's')
                     guistring[1]=guistring[1].replace('xbx',str(currentquest['hand']) + 's')
-            print(questdesc)
+            canvas.create_text([(150,592),(196,758),(300,1185)][res.get()],text=questdesc,font=("Flare Gothic",[8,10,16][res.get()]),anchor=tk.CENTER,fill='#ffffff',tags=('desc'))
             if 'qextra' in currentquest.keys():
                 guistring.append('[' + str(currentquest['qextra']) + ']')
             canvas.create_text([(38,130*(i-1)),(49,167+46*(i-1)),(76,261+72*(i-1))][res.get()],text=''.join(guistring),font=("Flare Gothic",[12,15,24][res.get()]),anchor=tk.SW,fill='#f4f4d0')
@@ -322,18 +334,27 @@ def challenge():
             waittime=10
             endtime+=waittime
             gracetime=time.time()+waittime
+            gracepb.place(x=223,y=0)
+            if timeshow.get() == 1 and questjson['challengeinfo']['type'] == 'timed':
+                timerlbl.place_forget()
             while time.time() < gracetime and isAborted == False:
+                gracepb['value']=gracetime-time.time()
                 gui.update()
             if isAborted == True:
                 break
+            gracepb.place_forget()
+            if timeshow.get() == 1 and questjson['challengeinfo']['type'] == 'timed':
+                timerlbl.place(x=[300,384,600][res.get()],y=11,anchor=tk.E)
             subchallenge(currentquest['objective'])
             i+=1
+        canvas.delete('desc')
         addscores()
         inChallenge=False
         sm_file.entryconfig("Resolution",state='active')
         sm_file.entryconfig("Open",state='active')
         sm_chal.entryconfig("Abort",state='disabled')
         sm_chal.entryconfig("Open",state='active')
+        sm_chal.entryconfig("Show time left",state='active')
         
 isAborted=False
 inChallenge=False
@@ -346,7 +367,7 @@ def abort():
 # tkinter related functions
 
 def changeRes():
-    global bgimg,canvas
+    global bgimg,canvas,gracepb
     reslist=['300x620','384x788','600x1220']
     bglist=['normalbg.png','highbg.png','ultrabg.png']
     gui.geometry(reslist[res.get()])
@@ -356,16 +377,25 @@ def changeRes():
         canvas.place(x=0,y=20)
         bg=canvas.create_image((148,300),image=bgimg)
         canvas.tag_lower(bg)
+        gracepb['length']=70
+        timerlbl.place(x=300,y=11,anchor=tk.E)
+        gui.title('BJ3WC alpha v0.1.1')
     elif res.get()==1:
         canvas = tk.Canvas(gui, width=384, height=768, bg='white')
         canvas.place(x=0,y=20)
         bg=canvas.create_image((190,384),image=bgimg)
         canvas.tag_lower(bg)
+        gracepb['length']=154
+        timerlbl.place(x=384,y=11,anchor=tk.E)
+        gui.title('BJ3WC alpha v0.1.1')
     elif res.get()==2:
         canvas = tk.Canvas(gui, width=600, height=1200, bg='white')
         canvas.place(x=0,y=20)
         bg=canvas.create_image((298,600),image=bgimg)
         canvas.tag_lower(bg)
+        gracepb['length']=370
+        timerlbl.place(x=600,y=11,anchor=tk.E)
+        gui.title('Bejeweled 3 World Championships alpha v0.1.1')
     
 def checkchallenge():
     global isAborted
@@ -380,18 +410,25 @@ def checkchallenge():
         gui.destroy()
         quit()
 
+def toggleTime():
+    if timeshow.get() == 1:
+        timerlbl.place(x=[300,384,600][res.get()],y=11,anchor=tk.E)
+    else:
+        timerlbl.place_forget()
 # tkinter GUI stuffs now
 
 gui=tk.Tk()
 gui.iconbitmap(p + '\\g em.ico')
 gui.protocol('WM_DELETE_WINDOW',checkchallenge)
-gui.geometry('300x620')
-gui.title('Bejeweled 3 World Championships alpha v0.2')
+gui.geometry('384x788')
+gui.title('BJ3WC alpha v0.1.1')
 gui.resizable(False,False)
 
 # tk variables
 res=tk.IntVar()
-res.set(0)
+res.set(1)
+timeshow=tk.IntVar()
+timeshow.set(0)
 font.add_file(p + "\\fonts\\Flare Gothic Regular.ttf")
 font.add_file(p + "\\fonts\\Myriad Pro Regular.ttf")
 
@@ -400,7 +437,7 @@ sm_file_button=ttk.Menubutton(gui,text='File')
 sm_file=tk.Menu(sm_file_button,tearoff=False)
 sm_file.add_command(label='Open',underline=0,command=challenge)
 ssm_reso=tk.Menu(sm_file,tearoff=False)
-ssm_reso.add_radiobutton(label='Normal (300x600)',value=0,variable=res,command=changeRes)
+ssm_reso.add_radiobutton(label='Normal (300x600)',value=0,variable=res,command=changeRes,state='disabled')
 ssm_reso.add_radiobutton(label='High (384x768)',value=1,variable=res,command=changeRes)
 ssm_reso.add_radiobutton(label='Ultra (600x1200)',value=2,variable=res,command=changeRes)
 sm_file.add_cascade(label='Resolution',menu=ssm_reso)
@@ -411,21 +448,29 @@ sm_chal=tk.Menu(sm_chal_button,tearoff=False)
 sm_chal.add_command(label='Open',underline=0,command=challenge)
 #ssm_pause=sm_chal.add_checkbutton(label='Pause',underline=0,state='disabled')
 ssm_abort=sm_chal.add_command(label='Abort',underline=0,state='disabled',command=abort)
+ssm_time=sm_chal.add_checkbutton(label='Show time left',underline=0,state='active',variable=timeshow,onvalue=1,offvalue=0,command=toggleTime)
 sm_chal_button['menu']=sm_chal
 sm_about_button=ttk.Menubutton(gui,text='About')
 sm_about=tk.Menu(sm_about_button,tearoff=False)
-sm_about.add_command(label='About',underline=0)
-sm_about.add_command(label='Readme file',underline=0)
+sm_about.add_command(label='Challenge',underline=0)
+sm_about.add_command(label='Documentation',underline=0,command=lambda: webopen('https://docs.google.com/document/d/1RMc6QYoLbh4WKirbTtwDfBR7-BULapBkJrw-ORYdfP8/edit?usp=sharing'))
 sm_about.add_command(label='GitHub page',underline=0,command=lambda: webopen('https://github.com/redstone59/Bejeweled3WorldChampionshipSet'))
 sm_about_button['menu']=sm_about
 sm_file_button.place(x=0,y=0)
 sm_chal_button.place(x=60,y=0)
 sm_about_button.place(x=150,y=0)
 
-bgimg = tk.PhotoImage(file=p + '\\images\\normalbg.png')
+gracepb=ttk.Progressbar(gui,orient='horizontal',mode='determinate',length=154,maximum=10)
+timerlbl=ttk.Label(gui,text='0:00',font=("Arial",10))
+
+bgimg = tk.PhotoImage(file=p + '\\images\\highbg.png')
 
 canvas = tk.Canvas(gui, width=300, height=600, bg='white')
 canvas.place(x=0,y=20)
 canvas.create_image((148,300),image=bgimg)
+
+canvas = tk.Canvas(gui, width=384, height=768, bg='white')
+canvas.place(x=0,y=20)
+canvas.create_image((190,384),image=bgimg)
 
 gui.mainloop()
