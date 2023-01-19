@@ -14,6 +14,7 @@ For documentation regarding the actual program (and how challenge files work), s
 + Sometimes does not detect restarts/game overs. Highest priority bug at the moment, as it can completely stall, and ruin, a run.
 + Quest related sub-challenges can be automatically skipped.
 + Time bonus quests don't skip
++ Score based modes (Classic, Lightning, Poker, etc) cannot work with the time bonus enabled.
 
 # Things that haven't been implemented yet
 
