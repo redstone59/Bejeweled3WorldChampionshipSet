@@ -1,5 +1,5 @@
 {
-    "Cascade":"All (but Zen, Diamond Mine, and Quests): Get a cascade of zxc",
+    "Cascade":"All (but Diamond Mine and Quests): Get a cascade of zxc",
     "Classic":"Classic: Score zxc points",
     "Zen":"Zen: Score zxc points",
     "Lightning":"Lightning: Score zxc points",
@@ -32,10 +32,10 @@
     "WallBlast":"Wall Blast: Destroy zxc wall tiles",
     "Treasure":"Buried Treasure: Uncover zxc treasures",
     "Sand":"Sandstorm: Uncover zxc fossil fragments",
-    "Blaster":"All (but Zen, Diamond Mine, and Quests): Clear zxc gems in one move",
-    "Inferno":"All (but Zen): Detonate zxc Flame Gems",
-    "Stellar":"All (but Zen): Detonate zxc Star Gems",
-    "Chromatic":"All (but Zen): Detonate zxc Hypercubes",
+    "Blaster":"All (but Diamond Mine and Quests): Clear zxc gems in one move",
+    "Inferno":"All (but Diamond Mine and Quests): Detonate zxc Flame Gems",
+    "Stellar":"All (but Diamond Mine and Quests): Detonate zxc Star Gems",
+    "Chromatic":"All (but Diamond Mine and Quests): Detonate zxc Hypercubes",
     
     "Classict":"Classic: Score as many points as you can",
     "Zent":"Zen: Score as many points as you can",
@@ -65,7 +65,7 @@
     "MatchBombt":"Match Bomb: Eliminate as many bombs as you can",
     "Avalanchet":"Avalanche: Clear as many gems before the board fills completely",
     "WallBlastt":"Wall Blast: Destroy as many wall tiles as you can with",
-    "Infernot":"All (but Zen): Detonate as many Flame Gems as you can with",
-    "Stellart":"All (but Zen): Detonate as many Star Gems as you can with",
-    "Chromatict":"All (but Zen): Detonate as many Hypercubes as you can with"
+    "Infernot":"All (but Diamond Mine and Quests): Detonate as many Flame Gems as you can with",
+    "Stellart":"All (but Diamond Mine and Quests): Detonate as many Star Gems as you can with",
+    "Chromatict":"All (but Diamond Mine and Quests): Detonate as many Hypercubes as you can with"
 }
