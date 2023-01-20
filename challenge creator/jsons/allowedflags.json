@@ -31,5 +31,8 @@
     "WallBlast":["value","timed"],
     "Treasure":["value"],
     "Sand":["value"],
-    "Blaster":["value"]
+    "Blaster":["value"],
+    "Inferno":["value","timed"],
+    "Stellar":["value","timed"],
+    "Chromatic":["value","timed"]
 }
