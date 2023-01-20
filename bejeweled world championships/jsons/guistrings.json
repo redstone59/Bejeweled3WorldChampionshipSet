@@ -33,6 +33,9 @@
     "Treasure":["Buried Treasure: ","zxc treasures "],
     "Sand":["Sandstorm: ","zxc fragments "],
     "Blaster":["All: ","zxc gems in one move "],
+    "Inferno":["All: ","zxc Flame Gems "],
+    "Stellar":["All: ","zxc Star Gems "],
+    "Chromatic":["All: ","zxc Hypercubes "],
 
     "Cascadet":["Any: ","Cascade "],
     "Classict":["Classic: ","Score "],
@@ -61,5 +64,8 @@
     "TimeBombt":["Time Bomb: ","Bombs "],
     "MatchBombt":["Match Bomb: ","Bombs "],
     "Avalanchet":["Avalanche: ","Gems "],
-    "WallBlastt":["Wall Blast: ","Tiles "]
+    "WallBlastt":["Wall Blast: ","Tiles "],
+    "Infernot":["All: ","Flame Gems "],
+    "Stellart":["All: ","Star Gems "],
+    "Chromatict":["All: ","Hypercubes "]
 }

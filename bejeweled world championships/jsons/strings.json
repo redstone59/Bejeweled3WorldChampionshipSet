@@ -33,6 +33,9 @@
     "Treasure":"Buried Treasure: Uncover zxc treasures",
     "Sand":"Sandstorm: Uncover zxc fossil fragments",
     "Blaster":"All (but Zen, Diamond Mine, and Quests): Clear zxc gems in one move",
+    "Inferno":"All (but Zen): Detonate zxc Flame Gems",
+    "Stellar":"All (but Zen): Detonate zxc Star Gems",
+    "Chromatic":"All (but Zen): Detonate zxc Hypercubes",
     
     "Classict":"Classic: Score as many points as you can",
     "Zent":"Zen: Score as many points as you can",
@@ -61,5 +64,8 @@
     "TimeBombt":"Time Bomb: Eliminate as many bombs as you can",
     "MatchBombt":"Match Bomb: Eliminate as many bombs as you can",
     "Avalanchet":"Avalanche: Clear as many gems before the board fills completely",
-    "WallBlastt":"Wall Blast: Destroy as many wall tiles as you can with"
+    "WallBlastt":"Wall Blast: Destroy as many wall tiles as you can with",
+    "Infernot":"All (but Zen): Detonate as many Flame Gems as you can with",
+    "Stellart":"All (but Zen): Detonate as many Star Gems as you can with",
+    "Chromatict":"All (but Zen): Detonate as many Hypercubes as you can with"
 }

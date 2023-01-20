@@ -32,5 +32,8 @@
     "WallBlast":"Quest",
     "Treasure":"Quest",
     "Sand":"Quest",
-    "Blaster":"All"
+    "Blaster":"All",
+    "Inferno":"All",
+    "Stellar":"All",
+    "Chromatic":"All"
 }
