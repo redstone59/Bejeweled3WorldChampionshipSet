@@ -20,3 +20,4 @@ For documentation regarding the actual program (and how challenge files work), s
 
 + Timed sub-challenges that involve 'getting the highest X' (e.g. Column Combo in Ice Storm, Cascade, amount of gems cleared in one move). This one is half-completed, but I need to figure out how to properly implement these sub-challenges. Making the score the highest number in the condition would lead to some very boring scores (the ones listed above usually don't go above 20)
 + Numerous planned sub-challenges (Diamond Mine: Depth, Treasure Count, Match/Time Bomb: Endless Mode, Quest Mode: Completed Quests)
++ Customisable grace period time, the ability to abort challenges, skip sub-challenges, view the time left in the challenge.
