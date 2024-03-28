@@ -1,3 +1,7 @@
+# IMPORTANT
+
+**This repository is deprecated.** The code quality is too garbage for me to handle, so I took the responsibility to completely [rewrite the code](https://github.com/redstone59/Bejeweled3WorldChampionships). The challenge creator hasn't been made yet, and the format for challenges is slightly different between versions, so you can't use that for the new version.
+
 # Bejeweled 3 World Championships
 A Python application that latches onto Bejeweled 3's memory addresses* to create a Nintendo World Championships type challenge.
 
